@@ -1,4 +1,4 @@
-package com.example.CapstoneB;
+package com.ivanovvasil.CapstoneB;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
