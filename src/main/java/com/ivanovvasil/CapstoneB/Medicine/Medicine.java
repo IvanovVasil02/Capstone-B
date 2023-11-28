@@ -24,6 +24,7 @@ public class Medicine {
   private String activeIngredient;
   private String groupDescription;
   private String nameAndPackaginf;
+  private String publicPrice;
   private String holderOfMarketingAuthorization;
   private String MarketingAuthorization;
   private String xInAifaTransparencyList;
