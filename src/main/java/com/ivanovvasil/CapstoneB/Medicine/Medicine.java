@@ -13,10 +13,10 @@ import java.rmi.server.UID;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Medicine {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

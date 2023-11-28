@@ -28,7 +28,7 @@ public class MedicinesService {
     return mr.findAll();
   }
 
-  public void readProvinceFileCsv(String path) throws IOException {
+  public void readMedicineFileCsv(String path) throws IOException {
     if (mr.findAll().isEmpty()) {
       try {
         CSVParser parser = new CSVParserBuilder().withSeparator(';').build();

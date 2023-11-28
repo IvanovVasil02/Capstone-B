@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.runner;
+package com.ivanovvasil.CapstoneB.Medicine;
 
 import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,6 @@ public class MedicineRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
     String meidicineListUrl = "src/main/java/com/ivanovvasil/CapstoneB/Medicine/medicineList.csv";
 
-    ms.readProvinceFileCsv(meidicineListUrl);
+    ms.readMedicineFileCsv(meidicineListUrl);
   }
 }
