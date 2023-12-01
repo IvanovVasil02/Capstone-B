@@ -16,4 +16,5 @@ public class Patient {
   private String email;
   private String password;
   private Doctor doctor;
+  
 }
