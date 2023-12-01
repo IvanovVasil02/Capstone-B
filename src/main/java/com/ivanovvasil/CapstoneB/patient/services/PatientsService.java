@@ -36,6 +36,10 @@ public class PatientsService {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
+  public Patient getPatientByEmail(String email) {
+    return pr.findByEmailIgnoreCase(email).orElseThrow(() -> new NotFoundException(email));
+  }
+
   public void delete(UUID id) {
     Patient toRemove = this.getPatientById(id);
     pr.delete(toRemove);
