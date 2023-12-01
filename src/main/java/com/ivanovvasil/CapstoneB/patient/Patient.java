@@ -1,5 +1,7 @@
 package com.ivanovvasil.CapstoneB.patient;
 
+import com.ivanovvasil.CapstoneB.doctor.Doctor;
+
 import java.util.UUID;
 
 public class Patient {
@@ -12,4 +14,5 @@ public class Patient {
   private String address;
   private String email;
   private String maritalStatus;
+  private Doctor doctor;
 }
