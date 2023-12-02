@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.doctor;
+package com.ivanovvasil.CapstoneB.ASL.ASLCodes;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -17,17 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Doctor {
+public class ASL {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
-  private String fullName;
-  private String phoneNumber;
-  private String email;
-  private String professionalRegistrationNumber;
-  private String medicalLicenseNumber;
-  private LocalDate expirationOfLicense;
-  private String emergencyContact;
-  private String province;
-  private String region;
+  private String regionCode;
+  private String regionDenomination;
+  private String companyCode;
+  private String companyDenomination;
+  private String municipalityCode;
+  private String municipalityDenomination;
 }

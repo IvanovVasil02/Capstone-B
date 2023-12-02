@@ -1,15 +1,13 @@
 package com.ivanovvasil.CapstoneB.Medicine;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ivanovvasil.CapstoneB.prescription.Prescription;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.rmi.server.UID;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,4 +28,6 @@ public class Medicine {
   private String xInAifaTransparencyList;
   private String xInRegionList;
   private String cubicMetersOxygen;
+  @ManyToMany(mappedBy = "prescription")
+  private List<Prescription> prescriptionList;
 }

@@ -1,6 +1,9 @@
 package com.ivanovvasil.CapstoneB.prescription;
 
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
+import com.ivanovvasil.CapstoneB.patient.Patient;
+import com.ivanovvasil.CapstoneB.prescription.payloads.FormattedPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +15,15 @@ public class PrescriptionsService {
   @Autowired
   PrescriptionRepo pr;
 
-  public Prescription save(Prescription prescription) {
-    return pr.save(prescription);
+  public FormattedPrescriptionDTO formatPrescription(Patient patient, PatientPrescriptionDTO prescriptionDTO) {
+
+    return FormattedPrescriptionDTO
+            .builder()
+            .patient(patient)
+            .prescription(prescriptionDTO.prescription())
+            .packagesNumber(prescriptionDTO.packagesNumber())
+            .region(patient.getDoctor().getRegion())
+            .build();
   }
 
   public Prescription finddById(UUID id) {

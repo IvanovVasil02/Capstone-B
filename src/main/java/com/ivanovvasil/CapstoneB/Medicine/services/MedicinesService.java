@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MedicinesService {
 
-@Autowired
+  @Autowired
   private MedicineRepo mr;
 
   public void save(Medicine province) {
@@ -47,15 +46,15 @@ public class MedicinesService {
   private Medicine createMedicine(String[] line) {
     try {
       Medicine medicine = new Medicine();
-     medicine.setActiveIngredient(line[0]);
-     medicine.setGroupDescription(line[1]);
-     medicine.setNameAndPackaginf(line[2]);
-     medicine.setPublicPrice(line[3]);
-     medicine.setHolderOfMarketingAuthorization(line[4]);
-     medicine.setMarketingAuthorization(line[5]);
-     medicine.setXInAifaTransparencyList(line[6]);
-     medicine.setXInRegionList(line[7]);
-     medicine.setCubicMetersOxygen(line[8]);
+      medicine.setActiveIngredient(line[0]);
+      medicine.setGroupDescription(line[1]);
+      medicine.setNameAndPackaginf(line[2]);
+      medicine.setPublicPrice(line[3]);
+      medicine.setHolderOfMarketingAuthorization(line[4]);
+      medicine.setMarketingAuthorization(line[5]);
+      medicine.setXInAifaTransparencyList(line[6]);
+      medicine.setXInRegionList(line[7]);
+      medicine.setCubicMetersOxygen(line[8]);
       return medicine;
     } catch (Exception e) {
       throw new RuntimeException("Error creating Medicine", e);

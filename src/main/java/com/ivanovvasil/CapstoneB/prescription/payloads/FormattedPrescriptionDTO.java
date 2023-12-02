@@ -1,18 +1,15 @@
 package com.ivanovvasil.CapstoneB.prescription.payloads;
 
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
-import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.patient.Patient;
+import lombok.Builder;
 
-import java.time.LocalDate;
 import java.util.List;
 
+@Builder
 public record FormattedPrescriptionDTO(Patient patient,
-                                       Doctor doctor,
                                        List<Medicine> prescription,
                                        int packagesNumber,
-                                       LocalDate isssuingDate,
-                                       String note,
                                        String region,
                                        String localHealthCode,
                                        String diagnosticQuestion,
