@@ -24,6 +24,7 @@ public class Doctor {
   private String fullName;
   private String phoneNumber;
   private String email;
+  private String fiscalCode;
   private String professionalRegistrationNumber;
   private String medicalLicenseNumber;
   private LocalDate expirationOfLicense;

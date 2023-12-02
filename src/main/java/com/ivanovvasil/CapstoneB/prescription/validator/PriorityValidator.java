@@ -1,0 +1,27 @@
+package com.ivanovvasil.CapstoneB.prescription.validator;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
+public class PriorityValidator implements ConstraintValidator<ValidPriority, String> {
+  private Enum<?>[] enums;
+
+  @Override
+  public void initialize(ValidPriority constraintAnnotation) {
+    enums = constraintAnnotation.enumClass().getEnumConstants();
+  }
+
+  @Override
+  public boolean isValid(String value, ConstraintValidatorContext context) {
+    if (value == null || value.trim().isEmpty()) {
+      return false;
+    }
+
+    for (Enum<?> enumValue : enums) {
+      if (enumValue.name().equals(value)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
