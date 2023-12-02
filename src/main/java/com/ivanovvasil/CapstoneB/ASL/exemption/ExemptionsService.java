@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.exemption;
+package com.ivanovvasil.CapstoneB.ASL.exemption;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

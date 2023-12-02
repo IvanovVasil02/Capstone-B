@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
-  @Query("SELECT p FROM Prescription p WHERE patient.id = :id")
+  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id")
   List<Prescription> findAllByPatientId(UUID id);
 }
