@@ -12,6 +12,6 @@ public record FormattedPrescriptionDTO(Patient patient,
                                        int packagesNumber,
                                        String region,
                                        String localHealthCode,
-                                       String diagnosticQuestion,
+                                 
                                        String typeRecipe) {
 }
