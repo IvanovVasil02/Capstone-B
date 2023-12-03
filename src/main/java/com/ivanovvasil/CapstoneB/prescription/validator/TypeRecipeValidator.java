@@ -13,8 +13,12 @@ public class TypeRecipeValidator implements ConstraintValidator<ValidTypeRecipe,
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value == null || value.trim().isEmpty()) {
-      return false;
+    if (value != null) {
+      for (Enum<?> enumValue : enums) {
+        if (enumValue.name().equals(value)) {
+          return true;
+        }
+      }
     }
     for (Enum<?> enumValue : enums) {
       if (enumValue.name().equals(value)) {

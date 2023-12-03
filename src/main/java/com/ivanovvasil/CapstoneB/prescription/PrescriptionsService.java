@@ -1,12 +1,17 @@
 package com.ivanovvasil.CapstoneB.prescription;
 
+import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
+import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
+import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
+import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.FormattedPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +19,19 @@ import java.util.UUID;
 public class PrescriptionsService {
   @Autowired
   PrescriptionRepo pr;
+  @Autowired
+  ASLService as;
+
+  public Prescription save(DoctorPrescriptionDTO body) {
+    Prescription prescription = this.finddById(body.id());
+    prescription.setIsssuingDate(LocalDate.now());
+    prescription.setNote(body.note());
+    prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
+    prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
+    prescription.setLocalHealthCode(as.getAslCodeByRegionName(prescription.getRegion()));
+    prescription.setDoctor(prescription.getPatient().getDoctor());
+    return pr.save(prescription);
+  }
 
   public FormattedPrescriptionDTO formatPrescription(Patient patient, PatientPrescriptionDTO prescriptionDTO) {
 

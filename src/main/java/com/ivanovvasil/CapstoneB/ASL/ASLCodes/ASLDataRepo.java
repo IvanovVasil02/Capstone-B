@@ -7,4 +7,5 @@ import java.util.UUID;
 
 @Repository
 public interface ASLDataRepo extends JpaRepository<ASL, UUID> {
+  ASL findByRegionLike(String region);
 }

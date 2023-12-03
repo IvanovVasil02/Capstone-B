@@ -3,6 +3,8 @@ package com.ivanovvasil.CapstoneB.prescription;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.patient.Patient;
+import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
+import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,5 +40,6 @@ public class Prescription {
   private String region;
   private String localHealthCode;
   private String diagnosticQuestion;
-  private String typeRecipe;
+  private TypeRecipe typeRecipe;
+  private PriorityPrescription priorityPrescription;
 }
