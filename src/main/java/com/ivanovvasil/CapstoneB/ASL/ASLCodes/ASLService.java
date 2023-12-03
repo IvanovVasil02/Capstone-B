@@ -46,6 +46,10 @@ public class ASLService {
     } catch (Exception e) {
       throw new RuntimeException("Error creating ASL", e);
     }
+  }
 
+  public String getAslCodeByRegionName(String region) {
+    ASL aslCode = ar.findByRegionLike(region);
+    return aslCode.getCompanyCode();
   }
 }

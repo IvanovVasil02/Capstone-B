@@ -13,15 +13,14 @@ public class PriorityValidator implements ConstraintValidator<ValidPriority, Str
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value == null || value.trim().isEmpty()) {
-      return false;
-    }
-
-    for (Enum<?> enumValue : enums) {
-      if (enumValue.name().equals(value)) {
-        return true;
+    if (value != null) {
+      for (Enum<?> enumValue : enums) {
+        if (enumValue.name().equals(value)) {
+          return true;
+        }
       }
     }
+
     return false;
   }
 }
