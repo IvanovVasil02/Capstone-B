@@ -49,7 +49,7 @@ public class ASLService {
   }
 
   public String getAslCodeByRegionName(String region) {
-    ASL aslCode = ar.findByRegionLike(region);
+    ASL aslCode = ar.findByRegionDenominationLike(region);
     return aslCode.getCompanyCode();
   }
 }

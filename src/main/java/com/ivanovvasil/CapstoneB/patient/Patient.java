@@ -1,11 +1,12 @@
 package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
-import jakarta.persistence.*;
+import com.ivanovvasil.CapstoneB.user.User;
+import com.ivanovvasil.CapstoneB.user.UserRole;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -13,19 +14,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class Patient {
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id;
-  private String name;
-  private String surname;
-  private LocalDate birthDate;
-  private String sex;
-  private String fiscalCode;
-  private String address;
-  private String email;
-  private String password;
+public class Patient extends User {
+
   @OneToOne
   @JoinColumn(name = "doctor_id")
   private Doctor doctor;
+  private UserRole role = UserRole.PATIENT;
 }
