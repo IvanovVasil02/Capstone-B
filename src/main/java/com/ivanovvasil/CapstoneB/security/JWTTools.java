@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JWTTools {
@@ -15,10 +17,15 @@ public class JWTTools {
   private String secret;
 
   public String createToken(User user) {
-    return Jwts.builder().setSubject(String.valueOf(user.getId()))
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("roel", user.getRole());
+    return Jwts.builder()
+            .setSubject(String.valueOf(user.getId()))
+            .setClaims(claims)
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-            .signWith(Keys.hmacShaKeyFor(secret.getBytes())).compact();
+            .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
+            .compact();
   }
 
   public void verifyToken(String token) {
