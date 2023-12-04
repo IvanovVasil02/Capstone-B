@@ -1,7 +1,6 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
 import com.ivanovvasil.CapstoneB.user.User;
-import com.ivanovvasil.CapstoneB.user.UserRole;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +19,4 @@ public class Doctor extends User {
   private String medicalLicenseNumber;
   private LocalDate expirationOfLicense;
   private String emergencyContact;
-  private UserRole role = UserRole.DOCTOR;
-
 }
