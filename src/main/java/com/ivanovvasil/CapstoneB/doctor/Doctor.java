@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -22,11 +21,12 @@ public class Doctor extends User {
   private LocalDate expirationOfLicense;
   private String emergencyContact;
 
-  public Doctor(String name, String surname, LocalDate birthDate, String sex, String fiscalCode, String address, String email, String password, String phoneNumber, String province, String region, UserRole role, UUID id, String professionalRegistrationNumber, String medicalLicenseNumber, LocalDate expirationOfLicense, String emergencyContact) {
-    super(name, surname, birthDate, sex, fiscalCode, address, email, password, phoneNumber, province, region, role, id);
+  public Doctor(String name, String surname, LocalDate birthDate, String sex, String address, String email, String password, String phoneNumber, String municipality, String region, String professionalRegistrationNumber, String medicalLicenseNumber, LocalDate expirationOfLicense, String emergencyContact, UserRole role) {
+    super(name, surname, birthDate, sex, address, email, password, phoneNumber, municipality, region, role);
     this.professionalRegistrationNumber = professionalRegistrationNumber;
     this.medicalLicenseNumber = medicalLicenseNumber;
     this.expirationOfLicense = expirationOfLicense;
     this.emergencyContact = emergencyContact;
   }
+
 }

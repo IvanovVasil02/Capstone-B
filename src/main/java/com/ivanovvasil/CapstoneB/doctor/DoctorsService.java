@@ -4,6 +4,7 @@ import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,5 +27,9 @@ public class DoctorsService {
     doctor.setEmergencyContact(body.emergencyContact());
     doctor.setPhoneNumber(body.phoneNumber());
     return dr.save(doctor);
+  }
+
+  public List<Doctor> getAll() {
+    return dr.findAll();
   }
 }

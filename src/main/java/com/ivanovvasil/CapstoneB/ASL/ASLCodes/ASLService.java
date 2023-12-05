@@ -17,6 +17,10 @@ public class ASLService {
   @Autowired
   ASLDataRepo ar;
 
+  public List<ASL> getAll() {
+    return ar.findAll();
+  }
+
   public void readASLFileCsv(String path) throws IOException {
     if (ar.findAll().isEmpty()) {
       try {
@@ -53,7 +57,7 @@ public class ASLService {
     return aslCode.getCompanyCode();
   }
 
-  public ASL getAslByMunicipality(String province) {
-    return ar.findByMunicipalityDenominationLike(province);
+  public ASL getAslByMunicipality(String municipality) {
+    return ar.findByMunicipality(municipality);
   }
 }

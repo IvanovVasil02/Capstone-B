@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ivanovvasil.CapstoneB.tools.Tools.calculateFiscalCode;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,12 +42,13 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  public User(String name, String surname, LocalDate birthDate, String sex, String fiscalCode, String address, String email, String password, String phoneNumber, String municipality, String region, UserRole role) {
+
+  public User(String name, String surname, LocalDate birthDate, String sex, String address, String email, String password, String phoneNumber, String municipality, String region, UserRole role) {
     this.name = name;
     this.surname = surname;
     this.birthDate = birthDate;
     this.sex = sex;
-    this.fiscalCode = fiscalCode;
+    this.fiscalCode = calculateFiscalCode(surname, name, sex, birthDate);
     this.address = address;
     this.email = email;
     this.password = password;
@@ -54,6 +57,7 @@ public class User implements UserDetails {
     this.region = region;
     this.role = role;
   }
+
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

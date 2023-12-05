@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.user;
+package com.ivanovvasil.CapstoneB.tools;
 
 import org.springframework.stereotype.Service;
 
@@ -8,8 +8,9 @@ import java.util.Random;
 
 @Service
 public class FiscalCodeService {
-  public StringBuilder getConsonatFromString(String surname, int index) {
+  public StringBuilder getConsonantFromString(String surname, int index) {
     int consonantCounter = 0;
+    surname = surname.replaceAll(" ", "");
     StringBuilder fiscalCode = new StringBuilder();
     for (int i = 0; i < surname.length() && consonantCounter < index; i++) {
       char currentChar = surname.charAt(i);
@@ -70,6 +71,6 @@ public class FiscalCodeService {
   }
 
   public char getControllLetter() {
-    return "ABCDEFGHILMNOPQRSTUVWXYZ".charAt(new Random().nextInt(0, 25));
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(new Random().nextInt(0, 25));
   }
 }

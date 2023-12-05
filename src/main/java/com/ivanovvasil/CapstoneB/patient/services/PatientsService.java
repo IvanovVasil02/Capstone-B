@@ -1,5 +1,6 @@
 package com.ivanovvasil.CapstoneB.patient.services;
 
+import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsRepo;
@@ -18,9 +19,13 @@ public class PatientsService {
 
   @Autowired
   PatientsRepo pr;
+  @Autowired
+  ASLService aslService;
 
-  public void save(Patient patient) {
-    pr.save(patient);
+  public Patient save(Patient patient) {
+    String aslCode = aslService.getAslByMunicipality(patient.getMunicipality()).getCompanyCode();
+    patient.setHealthCompanyCode(aslCode);
+    return pr.save(patient);
   }
 
   public Page<Patient> getAll(int page, int size, String orderBy) {

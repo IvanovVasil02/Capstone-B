@@ -41,9 +41,9 @@ public class UserAuhtentication {
     String userHealthCompanyCode = asl.getCompanyCode();
     String userRegion = asl.getRegionDenomination();
     Patient patient = new Patient(body.name(), body.surname(), body.birthDate(),
-            body.sex(), body.fiscalCode(), body.address(), body.email(),
+            body.sex(), body.address(), body.email(),
             body.password(), body.doctor().phoneNumber, body.municipality(),
-            userRegion, UserRole.PATIENT, body.doctor(), userHealthCompanyCode);
+            userRegion, UserRole.PATIENT, body.doctor());
     ps.save(patient);
   }
 
