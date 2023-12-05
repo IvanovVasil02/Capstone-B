@@ -52,4 +52,8 @@ public class ASLService {
     ASL aslCode = ar.findByRegionDenominationLike(region);
     return aslCode.getCompanyCode();
   }
+
+  public ASL getAslByMunicipality(String province) {
+    return ar.findByMunicipalityDenominationLike(province);
+  }
 }

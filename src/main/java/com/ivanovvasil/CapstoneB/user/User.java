@@ -2,7 +2,9 @@ package com.ivanovvasil.CapstoneB.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,27 +16,44 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIgnoreProperties({"createdAt", "password", "authorities", "bills", "enabled", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
 public class User implements UserDetails {
+  protected String name;
+  protected String surname;
+  protected LocalDate birthDate;
+  protected String sex;
+  protected String fiscalCode;
+  protected String address;
+  protected String email;
+  protected String password;
+  protected String phoneNumber;
+  protected String municipality;
+  protected String region;
+  @Enumerated(EnumType.STRING)
+  protected UserRole role;
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
-  private String name;
-  private String surname;
-  private LocalDate birthDate;
-  private String sex;
-  private String fiscalCode;
-  private String address;
-  private String email;
-  private String password;
-  private String phoneNumber;
-  private String province;
-  private String region;
-  @Enumerated(EnumType.STRING)
-  private UserRole role;
+
+  public User(String name, String surname, LocalDate birthDate, String sex, String fiscalCode, String address, String email, String password, String phoneNumber, String municipality, String region, UserRole role) {
+    this.name = name;
+    this.surname = surname;
+    this.birthDate = birthDate;
+    this.sex = sex;
+    this.fiscalCode = fiscalCode;
+    this.address = address;
+    this.email = email;
+    this.password = password;
+    this.phoneNumber = phoneNumber;
+    this.municipality = municipality;
+    this.region = region;
+    this.role = role;
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

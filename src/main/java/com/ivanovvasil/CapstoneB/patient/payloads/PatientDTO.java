@@ -23,9 +23,13 @@ public record PatientDTO(
 
         @NotEmpty(message = "The address is required.")
         String address,
+        @NotEmpty(message = "The municipality is required.")
+        String municipality,
 
         @NotEmpty(message = "The email is required.")
         String email,
+        @NotEmpty(message = "The password is required.")
+        String password,
 
         @NotEmpty(message = "The doctor is required.")
         Doctor doctor) {
