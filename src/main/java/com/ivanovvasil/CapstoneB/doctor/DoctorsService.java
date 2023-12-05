@@ -24,7 +24,6 @@ public class DoctorsService {
     Doctor doctor = this.findById(id);
     doctor.setEmail(body.email());
     doctor.setEmergencyContact(body.emergencyContact());
-    doctor.setProvince(body.province());
     doctor.setPhoneNumber(body.phoneNumber());
     return dr.save(doctor);
   }

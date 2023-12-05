@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface ASLDataRepo extends JpaRepository<ASL, UUID> {
   ASL findByRegionDenominationLike(String region);
 
-  ASL findByProvinceLike(String province);
 
   ASL findByMunicipalityDenominationLike(String province);
 }

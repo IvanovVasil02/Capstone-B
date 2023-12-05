@@ -4,8 +4,10 @@ import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.user.User;
 import com.ivanovvasil.CapstoneB.user.UserRole;
+import com.ivanovvasil.CapstoneB.user.UsersService;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,8 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(builderClassName = "PatientsBuilder")
 public class Patient extends User {
+
+  @Autowired
+  UsersService us;
 
   @OneToOne
   @JoinColumn(name = "doctor_id")
