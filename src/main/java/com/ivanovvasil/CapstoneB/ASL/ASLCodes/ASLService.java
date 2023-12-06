@@ -40,12 +40,12 @@ public class ASLService {
   private ASL createASL(String[] line) {
     try {
       ASL asl = new ASL();
-      asl.setRegionCode(line[1]);
-      asl.setRegionDenomination(line[2]);
-      asl.setCompanyCode(line[3]);
-      asl.setCompanyDenomination(line[4]);
-      asl.setMunicipalityCode(line[5]);
-      asl.setMunicipalityDenomination(line[6]);
+      asl.setRegionCode(line[1].trim());
+      asl.setRegionDenomination(line[2].trim());
+      asl.setCompanyCode(line[3].trim());
+      asl.setCompanyDenomination(line[4].trim());
+      asl.setMunicipalityCode(line[5].trim());
+      asl.setMunicipalityDenomination(line[6].trim());
       return asl;
     } catch (Exception e) {
       throw new RuntimeException("Error creating ASL", e);

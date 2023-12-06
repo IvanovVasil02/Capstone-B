@@ -18,7 +18,7 @@ import java.util.Random;
 import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
-@Order(3)
+@Order(4)
 public class DoctorsRunner implements ApplicationRunner {
   @Autowired
   DoctorsService ds;
@@ -31,14 +31,14 @@ public class DoctorsRunner implements ApplicationRunner {
     if (!executed) {
       Faker faker = new Faker(Locale.ITALY);
       List<ASL> aslList = as.getAll();
-      String[] sex = new String[]{"M", "F"};
+      String[] sex = {"M", "F"};
 
       for (int i = 0; i < 10; i++) {
         ASL asl = aslList.get(new Random().nextInt(0, aslList.size() - 1));
         Doctor doctor = new Doctor(faker.name().firstName(),
                 faker.name().lastName(),
                 getRandomLocalDate(),
-                sex[new Random().nextInt(0, sex.length)],
+                sex[new Random().nextInt(0, 1)],
                 faker.address().streetAddress(),
                 faker.internet().emailAddress(),
                 "12345",

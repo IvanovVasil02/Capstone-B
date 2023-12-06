@@ -18,6 +18,7 @@ public class Exemption {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
   private String exemptionCode;
+  @Column(name = "description", length = 1024)
   private String description;
   private String type;
   @ManyToMany(mappedBy = "exemptions")

@@ -25,7 +25,7 @@ public class FiscalCodeService {
     }
 
     if (consonantCounter < index) {
-      for (int i = 0; consonantCounter < index; i++) {
+      for (int i = consonantCounter; i < index; i++) {
         char currentChar = surname.charAt(i);
         if (isVocal(currentChar)) {
           fiscalCode.append(currentChar);

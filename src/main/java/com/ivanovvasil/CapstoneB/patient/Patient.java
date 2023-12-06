@@ -18,7 +18,7 @@ import java.util.List;
 @Builder(builderClassName = "PatientsBuilder")
 public class Patient extends User {
   @ManyToOne
-  @JoinColumn(name = "doctor_id")
+  @JoinColumn(name = "user_doctor_id")
   private Doctor doctor;
   private String healthCompanyCode;
   @ManyToMany

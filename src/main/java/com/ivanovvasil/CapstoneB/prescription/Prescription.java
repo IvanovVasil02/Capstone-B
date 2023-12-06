@@ -22,10 +22,10 @@ public class Prescription {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "patient_id")
   private Patient patient;
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "doctor_id")
   private Doctor doctor;
   @ManyToMany

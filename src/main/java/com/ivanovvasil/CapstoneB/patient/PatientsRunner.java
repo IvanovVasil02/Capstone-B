@@ -20,7 +20,7 @@ import java.util.Random;
 import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
-@Order(4)
+@Order(5)
 public class PatientsRunner implements ApplicationRunner {
   @Autowired
   PatientsService ps;
@@ -36,7 +36,7 @@ public class PatientsRunner implements ApplicationRunner {
       Faker faker = new Faker(Locale.ITALY);
       List<ASL> aslList = as.getAll();
       List<Doctor> doctorList = ds.getAll();
-      String[] sex = new String[]{"M", "F"};
+      String[] sex = {"M", "F"};
 
       for (int i = 0; i < 50; i++) {
         ASL asl = aslList.get(new Random().nextInt(0, aslList.size() - 1));

@@ -33,6 +33,10 @@ public class PrescriptionsService {
     return pr.save(prescription);
   }
 
+  public Prescription save(Prescription prescription) {
+    return pr.save(prescription);
+  }
+
   public FormattedPrescriptionDTO formatPrescription(Patient patient, PatientPrescriptionDTO prescriptionDTO) {
 
     return FormattedPrescriptionDTO
