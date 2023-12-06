@@ -57,4 +57,8 @@ public class ExemptionsService {
       throw new RuntimeException("Error creating Exemption", e);
     }
   }
+
+  public List<Exemption> getAll() {
+    return er.findAll();
+  }
 }

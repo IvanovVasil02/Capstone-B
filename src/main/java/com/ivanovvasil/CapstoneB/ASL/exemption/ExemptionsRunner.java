@@ -1,18 +1,42 @@
 package com.ivanovvasil.CapstoneB.ASL.exemption;
 
+import com.ivanovvasil.CapstoneB.patient.Patient;
+import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 @Component
-public class ExemptionsRunner implements CommandLineRunner {
+@Order(4)
+public class ExemptionsRunner implements ApplicationRunner {
+  @Autowired
+  PatientsService ps;
   @Autowired
   ExemptionsService es;
+  private boolean executed = true;
+
 
   @Override
-  public void run(String... args) throws Exception {
-    String ExemptionsListUrl = "src/main/java/com/ivanovvasil/CapstoneB/ASL/exemption/ExemptionsCodeList.csv";
+  public void run(ApplicationArguments args) throws Exception {
+    if (!executed) {
+      List<Patient> patientList = ps.getAllPatients();
+      List<Exemption> exemptions = es.getAll();
 
-    es.readExemptionFileCsv(ExemptionsListUrl);
+      for (int i = 0; i < 50; i++) {
+        Patient patient = patientList.get(new Random().nextInt(0, patientList.size()));
+        Exemption ex = exemptions.get(new Random().nextInt(0, exemptions.size()));
+        Exemption ex1 = exemptions.get(new Random().nextInt(0, exemptions.size()));
+
+        patient.setExemptions(Arrays.asList(ex, ex1));
+        ps.save(patient);
+      }
+      executed = false;
+    }
   }
 }
