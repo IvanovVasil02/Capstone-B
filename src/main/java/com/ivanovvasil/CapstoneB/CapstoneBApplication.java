@@ -1,13 +1,12 @@
-package com.example.CapstoneB;
+package com.ivanovvasil.CapstoneB;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CapstoneBApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(CapstoneBApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(CapstoneBApplication.class, args);
+  }
 
 }
