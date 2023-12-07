@@ -1,6 +1,5 @@
 package com.ivanovvasil.CapstoneB.patient.payloads;
 
-import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
@@ -30,7 +29,7 @@ public record PatientDTO(
         String email,
         @NotEmpty(message = "The password is required.")
         String password,
-
-        @NotEmpty(message = "The doctor is required.")
-        Doctor doctor) {
+        @NotEmpty(message = "The phone number is required.")
+        String phoneNumber,
+        String doctorId) {
 }

@@ -18,7 +18,7 @@ public class JWTTools {
 
   public String createToken(User user) {
     Map<String, Object> claims = new HashMap<>();
-    claims.put("roel", user.getRole());
+    claims.put("role", user.getRole());
     return Jwts.builder()
             .setSubject(String.valueOf(user.getId()))
             .setClaims(claims)

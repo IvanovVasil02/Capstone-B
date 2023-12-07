@@ -10,6 +10,6 @@ import java.util.UUID;
 public interface ASLDataRepo extends JpaRepository<ASL, UUID> {
   ASL findByRegionDenominationLike(String region);
 
-  @Query("SELECT a FROM ASL a WHERE a.municipalityDenomination = :municipality")
+  @Query("SELECT a FROM ASL a WHERE lower(a.municipalityDenomination) = lower(:municipality)")
   ASL findByMunicipality(String municipality);
 }

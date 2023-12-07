@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.Medicine;
+package com.ivanovvasil.CapstoneB.runners;
 
 import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
 import org.springframework.beans.factory.annotation.Autowired;

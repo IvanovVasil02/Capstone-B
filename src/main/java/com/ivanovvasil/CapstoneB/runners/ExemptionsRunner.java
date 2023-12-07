@@ -1,5 +1,6 @@
-package com.ivanovvasil.CapstoneB.ASL.exemption;
+package com.ivanovvasil.CapstoneB.runners;
 
+import com.ivanovvasil.CapstoneB.ASL.exemption.ExemptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

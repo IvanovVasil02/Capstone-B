@@ -2,7 +2,7 @@ package com.ivanovvasil.CapstoneB.security;
 
 import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
 import com.ivanovvasil.CapstoneB.user.User;
-import com.ivanovvasil.CapstoneB.user.UsersService;
+import com.ivanovvasil.CapstoneB.user.services.UsersService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,6 +44,6 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    return new AntPathMatcher().match("/auth/**", request.getServletPath());
+    return new AntPathMatcher().match("/authentication/**", request.getServletPath());
   }
 }

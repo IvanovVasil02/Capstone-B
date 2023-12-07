@@ -25,7 +25,7 @@ public class FiscalCodeService {
     }
 
     if (consonantCounter < index) {
-      for (int i = consonantCounter; i < index; i++) {
+      for (int i = 0; i < index && consonantCounter < index; i++) {
         char currentChar = surname.charAt(i);
         if (isVocal(currentChar)) {
           fiscalCode.append(currentChar);
@@ -41,7 +41,6 @@ public class FiscalCodeService {
   }
 
   public String getMonth(int month) {
-
     Map<Integer, String> monthsLetter = new HashMap<>();
     monthsLetter.put(1, "A");
     monthsLetter.put(2, "B");

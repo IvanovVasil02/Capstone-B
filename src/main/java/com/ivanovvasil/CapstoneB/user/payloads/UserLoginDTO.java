@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.user;
+package com.ivanovvasil.CapstoneB.user.payloads;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

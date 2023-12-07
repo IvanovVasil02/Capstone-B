@@ -1,9 +1,11 @@
-package com.ivanovvasil.CapstoneB.prescription;
+package com.ivanovvasil.CapstoneB.runners;
 
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
+import com.ivanovvasil.CapstoneB.prescription.Prescription;
+import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
