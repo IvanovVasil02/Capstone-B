@@ -1,7 +1,7 @@
 package com.ivanovvasil.CapstoneB.runners;
 
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
-import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
+import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;

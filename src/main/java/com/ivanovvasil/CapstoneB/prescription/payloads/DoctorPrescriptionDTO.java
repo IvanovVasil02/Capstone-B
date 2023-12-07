@@ -7,10 +7,8 @@ import com.ivanovvasil.CapstoneB.prescription.validator.ValidPriority;
 import com.ivanovvasil.CapstoneB.prescription.validator.ValidTypeRecipe;
 
 import java.util.List;
-import java.util.UUID;
 
 public record DoctorPrescriptionDTO(
-        UUID id,
         List<Medicine> prescription,
         int packagesNumber,
         String note,

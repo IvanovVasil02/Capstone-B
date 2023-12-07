@@ -1,6 +1,6 @@
 package com.ivanovvasil.CapstoneB.runners;
 
-import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
+import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;

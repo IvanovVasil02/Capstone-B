@@ -1,17 +1,22 @@
-package com.ivanovvasil.CapstoneB.Medicine.services;
+package com.ivanovvasil.CapstoneB.Medicine;
 
-import com.ivanovvasil.CapstoneB.Medicine.Medicine;
+import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MedicinesService {
@@ -23,8 +28,17 @@ public class MedicinesService {
     mr.save(province);
   }
 
+  public Medicine findById(UUID id) {
+    return mr.findById(id).orElseThrow(() -> new NotFoundException(id));
+  }
+
   public List<Medicine> getAllMedicines() {
     return mr.findAll();
+  }
+
+  public Page<Medicine> getAllMedicines(int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    return mr.findAll(pageable);
   }
 
   public void readMedicineFileCsv(String path) throws IOException {
@@ -62,5 +76,8 @@ public class MedicinesService {
 
   }
 
+  public MedicineDTO convertMedicineToDTO(Medicine medicine) {
+    return new MedicineDTO(medicine.getActiveIngredient(), medicine.getNameAndPackaginf(), medicine.getPublicPrice());
+  }
 
 }

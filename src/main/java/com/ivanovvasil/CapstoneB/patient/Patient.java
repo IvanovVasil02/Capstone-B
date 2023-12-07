@@ -21,7 +21,7 @@ public class Patient extends User {
   @JoinColumn(name = "user_doctor_id")
   private Doctor doctor;
   private String healthCompanyCode;
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
           name = "patients_exemptions",
           joinColumns = @JoinColumn(name = "patient_id"),

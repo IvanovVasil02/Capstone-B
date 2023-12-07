@@ -1,6 +1,5 @@
-package com.ivanovvasil.CapstoneB.Medicine.services;
+package com.ivanovvasil.CapstoneB.Medicine;
 
-import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
