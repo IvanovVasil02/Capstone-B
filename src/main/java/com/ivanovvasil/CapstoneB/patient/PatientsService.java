@@ -1,9 +1,10 @@
-package com.ivanovvasil.CapstoneB.patient.services;
+package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
+import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
+import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
-import com.ivanovvasil.CapstoneB.patient.Patient;
-import com.ivanovvasil.CapstoneB.patient.PatientsRepo;
+import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,25 @@ public class PatientsService {
   public Page<Patient> getAll(int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     return pr.findAll(pageable);
+  }
+
+  public List<PatientResponseDTO> getPatientsList(Doctor doctor) {
+    List<Patient> patientList = pr.findByDoctor(doctor);
+    return patientList.stream().map((patient) -> {
+      return PatientResponseDTO.builder()
+              .name(patient.getName())
+              .surname(patient.getSurname())
+              .birthDate(patient.getBirthDate())
+              .sex(patient.getSex())
+              .address(patient.getAddress())
+              .fiscalCode(patient.getFiscalCode())
+              .phoneNumber(patient.getPhoneNumber())
+              .municipality(patient.getMunicipality())
+              .email(patient.getEmail())
+              .doctor(patient.getDoctor().getName() + " " + patient.getDoctor().getSurname())
+              .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())
+              .build();
+    }).toList();
   }
 
   public List<Patient> getAllPatients() {

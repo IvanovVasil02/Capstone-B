@@ -6,7 +6,7 @@ import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
-import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
+import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.user.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

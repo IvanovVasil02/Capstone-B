@@ -19,6 +19,7 @@ public class JWTTools {
   public String createToken(User user) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("role", user.getRole());
+    claims.put("id", user.getId());
     return Jwts.builder()
             .setSubject(String.valueOf(user.getId()))
             .setClaims(claims)
@@ -39,7 +40,11 @@ public class JWTTools {
   }
 
   public String extractIdFroToken(String token) {
-    return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes())).build().parseClaimsJws(token).getBody().getSubject();
+    return Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes()))
+            .build()
+            .parseClaimsJws(token)
+            .getBody().get("id").toString();
   }
 
 }

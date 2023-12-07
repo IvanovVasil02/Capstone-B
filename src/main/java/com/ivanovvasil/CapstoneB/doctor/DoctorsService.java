@@ -32,4 +32,6 @@ public class DoctorsService {
   public List<Doctor> getAll() {
     return dr.findAll();
   }
+
+
 }

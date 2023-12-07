@@ -1,6 +1,5 @@
 package com.ivanovvasil.CapstoneB.patient;
 
-import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

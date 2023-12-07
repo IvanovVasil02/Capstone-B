@@ -3,9 +3,10 @@ package com.ivanovvasil.CapstoneB.runners;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.services.MedicinesService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
-import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
+import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
+import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
 @Order(7)
@@ -48,6 +51,8 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .packagesNumber(new Random().nextInt(1, 6))
                 .region(currentPatient.getDoctor().getRegion())
                 .localHealthCode(currentPatient.getHealthCompanyCode())
+                .status(PrescriptionStatus.APPROVATA)
+                .isssuingDate(getRandomLocalDate())
                 .build();
         prs.save(prescription);
       }

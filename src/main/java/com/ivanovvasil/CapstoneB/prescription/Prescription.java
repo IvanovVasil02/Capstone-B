@@ -3,6 +3,7 @@ package com.ivanovvasil.CapstoneB.prescription;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.patient.Patient;
+import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import jakarta.persistence.*;
@@ -40,6 +41,10 @@ public class Prescription {
   private String region;
   private String localHealthCode;
   private String diagnosticQuestion;
+  @Enumerated(EnumType.STRING)
   private TypeRecipe typeRecipe;
+  @Enumerated(EnumType.STRING)
   private PriorityPrescription priorityPrescription;
+  @Enumerated(EnumType.STRING)
+  private PrescriptionStatus status;
 }
