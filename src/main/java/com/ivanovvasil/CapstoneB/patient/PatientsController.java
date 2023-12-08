@@ -2,7 +2,6 @@ package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
-import com.ivanovvasil.CapstoneB.prescription.payloads.FormattedPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,9 +25,9 @@ public class PatientsController {
 
   @PostMapping("/takePrescription")
   @ResponseStatus(HttpStatus.CREATED)
-  public FormattedPrescriptionDTO prescriptionRequest(@AuthenticationPrincipal Patient currentUser, @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
+  public void prescriptionRequest(@AuthenticationPrincipal Patient currentUser, @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
     System.out.println(patientPrescriptionDTO.toString());
-    return prs.formatPrescription(currentUser, patientPrescriptionDTO);
+    prs.formatPrescription(currentUser, patientPrescriptionDTO);
   }
 
 }

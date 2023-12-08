@@ -1,8 +1,9 @@
 package com.ivanovvasil.CapstoneB.prescription.payloads;
 
-import java.util.List;
+import com.ivanovvasil.CapstoneB.prescription.PrescriptionDetails;
+
+import java.util.Set;
 
 public record PatientPrescriptionDTO(
-        List<String> prescription,
-        Integer packagesNumber) {
+        Set<PrescriptionDetails> prescription) {
 }

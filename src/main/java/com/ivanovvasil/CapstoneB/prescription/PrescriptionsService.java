@@ -12,14 +12,13 @@ import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.FormattedPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -32,11 +31,13 @@ public class PrescriptionsService {
   MedicinesService ms;
   @Autowired
   PatientsService ps;
+  @Autowired
+  PrescriptionDetailsRepo prsd;
 
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
     if (prescription.getDoctor().getId().equals(doctorId)) {
-      prescription.setIsssuingDate(LocalDate.now());
+      prescription.setIssuingDate(LocalDate.now());
       prescription.setNote(body.note());
       prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
       prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
@@ -49,37 +50,31 @@ public class PrescriptionsService {
 
   }
 
-  public Prescription save(Prescription prescription) {
-    return pr.save(prescription);
+  public void save(Prescription prescription) {
+    pr.save(prescription);
   }
 
-  public FormattedPrescriptionDTO formatPrescription(Patient patient, PatientPrescriptionDTO patientPrescriptionDTO) {
+  public void formatPrescription(Patient patient, PatientPrescriptionDTO patientPrescriptionDTO) {
 
-    List<Medicine> medicineList = new ArrayList<>();
-
-    patientPrescriptionDTO.prescription().forEach(medicine -> medicineList.add(ms.findById(UUID.fromString(medicine))));
-
-    System.out.println(patientPrescriptionDTO.packagesNumber());
+    Set<PrescriptionDetails> prescriptionDetailsSet = patientPrescriptionDTO.prescription();
+    int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
 
     Prescription prescription = Prescription.builder()
             .status(PrescriptionStatus.IN_ATTESA)
             .patient(patient)
-            .prescription(medicineList)
-            .packagesNumber(patientPrescriptionDTO.packagesNumber())
+            .prescription(patientPrescriptionDTO.prescription())
+            .packagesNumber(packagingCount)
             .region(patient.getRegion())
             .doctor(patient.getDoctor())
             .build();
     this.save(prescription);
 
-
-    return FormattedPrescriptionDTO
-            .builder()
-            .patient(ps.convertPatientResponse(patient))
-            .prescription(medicineList.stream().map(medicine -> ms.convertMedicineToDTO(medicine)).toList())
-            .packagesNumber(patientPrescriptionDTO.packagesNumber())
-            .region(patient.getDoctor().getRegion())
-            .localHealthCode(patient.getHealthCompanyCode())
-            .build();
+    for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+      Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
+      prescriptionDetails.setMedicine(medicine);
+      prescriptionDetails.setPrescription(prescription);
+      prsd.save(prescriptionDetails);
+    }
   }
 
   public Prescription findById(UUID id) {
@@ -99,4 +94,7 @@ public class PrescriptionsService {
   }
 
 
+  public List<Prescription> getPrescriptions(Doctor doctor) {
+    return pr.findByDoctorId(doctor.getId());
+  }
 }

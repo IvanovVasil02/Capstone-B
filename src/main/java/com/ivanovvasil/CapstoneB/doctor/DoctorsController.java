@@ -29,6 +29,12 @@ public class DoctorsController {
     return ps.getPatientsList(body);
   }
 
+  @GetMapping("/prescriptions")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  public List<Prescription> getPrescriptions(@AuthenticationPrincipal Doctor doctor) {
+    return prs.getPrescriptions(doctor);
+  }
+
   @GetMapping("/prescriptionsToApp")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public List<Prescription> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor) {

@@ -1,6 +1,5 @@
 package com.ivanovvasil.CapstoneB.prescription;
 
-import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
@@ -10,10 +9,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Table(name = "prescriptions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,14 +30,10 @@ public class Prescription {
   @ManyToOne
   @JoinColumn(name = "doctor_id")
   private Doctor doctor;
-  @ManyToMany
-  @JoinTable(
-          name = "presciption_medicine",
-          joinColumns = @JoinColumn(name = "prescription_id"),
-          inverseJoinColumns = @JoinColumn(name = "medicine_id"))
-  private List<Medicine> prescription;
+  @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<PrescriptionDetails> prescription = new HashSet<>();
   private int packagesNumber;
-  private LocalDate isssuingDate;
+  private LocalDate issuingDate;
   private String note;
   private String region;
   private String localHealthCode;

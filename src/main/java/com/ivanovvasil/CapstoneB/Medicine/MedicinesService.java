@@ -62,7 +62,7 @@ public class MedicinesService {
       Medicine medicine = new Medicine();
       medicine.setActiveIngredient(line[0]);
       medicine.setGroupDescription(line[1]);
-      medicine.setNameAndPackaginf(line[2]);
+      medicine.setNameAndPackaging(line[2]);
       medicine.setPublicPrice(line[3]);
       medicine.setHolderOfMarketingAuthorization(line[4]);
       medicine.setMarketingAuthorization(line[5]);
@@ -77,7 +77,7 @@ public class MedicinesService {
   }
 
   public MedicineDTO convertMedicineToDTO(Medicine medicine) {
-    return new MedicineDTO(medicine.getActiveIngredient(), medicine.getNameAndPackaginf(), medicine.getPublicPrice());
+    return new MedicineDTO(medicine.getActiveIngredient(), medicine.getNameAndPackaging(), medicine.getPublicPrice());
   }
 
 }
