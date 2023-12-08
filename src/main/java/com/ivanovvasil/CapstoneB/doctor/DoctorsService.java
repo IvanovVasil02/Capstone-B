@@ -33,5 +33,13 @@ public class DoctorsService {
     return dr.findAll();
   }
 
+  public DoctorDTO convertToDoctorDTO(Doctor doctor) {
+    return DoctorDTO.builder()
+            .name(doctor.getName())
+            .surname(doctor.getSurname())
+            .fiscalCode(doctor.getFiscalCode())
+            .doctorId(doctor.getId())
+            .build();
+  }
 
 }

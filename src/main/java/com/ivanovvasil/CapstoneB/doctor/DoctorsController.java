@@ -5,6 +5,7 @@ import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,7 +38,7 @@ public class DoctorsController {
 
   @GetMapping("/prescriptionsToApp")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public List<Prescription> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor) {
+  public List<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor) {
     return prs.getPrescriptionsToApprove(doctor);
   }
 

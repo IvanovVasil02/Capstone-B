@@ -4,6 +4,7 @@ import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
+import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
@@ -13,6 +14,8 @@ import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionsService {
@@ -31,6 +35,8 @@ public class PrescriptionsService {
   MedicinesService ms;
   @Autowired
   PatientsService ps;
+  @Autowired
+  DoctorsService ds;
   @Autowired
   PrescriptionDetailsRepo prsd;
 
@@ -85,8 +91,9 @@ public class PrescriptionsService {
     return pr.findAllByPatientId(id);
   }
 
-  public List<Prescription> getPrescriptionsToApprove(Doctor doctor) {
-    return pr.getPrescriptionsToApprove(doctor.getId());
+  public List<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor) {
+    List<Prescription> prescriptionList = pr.getPrescriptionsToApprove(doctor.getId());
+    return prescriptionList.stream().map(this::convertToPrescriptionDTO).collect(Collectors.toList());
   }
 
   public void delete(UUID id) {
@@ -96,5 +103,27 @@ public class PrescriptionsService {
 
   public List<Prescription> getPrescriptions(Doctor doctor) {
     return pr.findByDoctorId(doctor.getId());
+  }
+
+  public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
+    return PrescriptionDetailsDTO.builder()
+            .id(prescriptionDetails.getId())
+            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
+            .quantity(prescriptionDetails.getQuantity())
+            .build();
+  }
+
+  public PrescriptionDTO convertToPrescriptionDTO(Prescription prescription) {
+    Set<PrescriptionDetailsDTO> prescriptionDetailsDTOList = prescription.getPrescription()
+            .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
+    return PrescriptionDTO.builder()
+            .patient(ps.convertPatientResponse(prescription.getPatient()))
+            .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
+            .prescription(prescriptionDetailsDTOList)
+            .packagesNumber(prescription.getPackagesNumber())
+            .region(prescription.getRegion())
+            .localHealthCode(prescription.getLocalHealthCode())
+            .status(prescription.getStatus())
+            .build();
   }
 }
