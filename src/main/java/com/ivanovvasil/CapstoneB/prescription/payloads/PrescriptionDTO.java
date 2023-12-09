@@ -9,9 +9,11 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 public record PrescriptionDTO(
+        UUID prescriptionID,
         PatientResponseDTO patient,
         DoctorDTO doctor,
         Set<PrescriptionDetailsDTO> prescription,

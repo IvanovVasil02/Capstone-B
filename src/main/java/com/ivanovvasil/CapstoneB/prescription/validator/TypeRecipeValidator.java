@@ -20,6 +20,9 @@ public class TypeRecipeValidator implements ConstraintValidator<ValidTypeRecipe,
         }
       }
     }
+    if (value == null) {
+      return true;
+    }
     for (Enum<?> enumValue : enums) {
       if (enumValue.name().equals(value)) {
         return true;

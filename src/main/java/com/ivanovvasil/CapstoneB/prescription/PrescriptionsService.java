@@ -45,10 +45,16 @@ public class PrescriptionsService {
     if (prescription.getDoctor().getId().equals(doctorId)) {
       prescription.setIssuingDate(LocalDate.now());
       prescription.setNote(body.note());
-      prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
-      prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
-      prescription.setLocalHealthCode(as.getAslCodeByRegionName(prescription.getRegion()));
-      prescription.setDoctor(prescription.getPatient().getDoctor());
+      prescription.setLocalHealthCode(prescription.getPatient().getHealthCompanyCode());
+      if (body.priority() != null) {
+        prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
+      }
+      if (body.typeRecipe() != null) {
+        prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
+      }
+      if (!prescription.getPrescription().isEmpty()) {
+        prescription.setPrescription(prescription.getPrescription());
+      }
       return pr.save(prescription);
     } else {
       throw new UnauthorizedException("Permissions denied for this recipe");
@@ -117,6 +123,7 @@ public class PrescriptionsService {
     Set<PrescriptionDetailsDTO> prescriptionDetailsDTOList = prescription.getPrescription()
             .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
     return PrescriptionDTO.builder()
+            .prescriptionID(prescription.getId())
             .patient(ps.convertPatientResponse(prescription.getPatient()))
             .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
             .prescription(prescriptionDetailsDTOList)

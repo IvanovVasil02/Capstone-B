@@ -56,7 +56,7 @@ public class UserAuhtenticationService {
     String userRegion = asl.getRegionDenomination();
     Patient patient = new Patient(body.name(), body.surname(), body.birthDate(),
             body.sex(), body.address(), body.email(),
-            body.password(), body.phoneNumber(), body.municipality(),
+            bcrypt.encode(body.password()), body.phoneNumber(), body.municipality(),
             userRegion, UserRole.PATIENT, doctor);
     return ps.save(patient);
   }
