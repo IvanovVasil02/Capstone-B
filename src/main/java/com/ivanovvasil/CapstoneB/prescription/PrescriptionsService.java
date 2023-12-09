@@ -17,6 +17,10 @@ import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -93,9 +97,6 @@ public class PrescriptionsService {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
-  public List<Prescription> finddAllPrescriptionById(UUID id) {
-    return pr.findAllByPatientId(id);
-  }
 
   public List<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor) {
     List<Prescription> prescriptionList = pr.getPrescriptionsToApprove(doctor.getId());
@@ -132,5 +133,12 @@ public class PrescriptionsService {
             .localHealthCode(prescription.getLocalHealthCode())
             .status(prescription.getStatus())
             .build();
+  }
+
+  public Page<PrescriptionDTO> getPatientsPrescriptions(Patient currentPatient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Prescription> medicinePage = pr.findAllByPatientId(currentPatient.getId(), pageable);
+    return medicinePage.map(this::convertToPrescriptionDTO);
+
   }
 }

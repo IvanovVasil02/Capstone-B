@@ -77,7 +77,7 @@ public class MedicinesService {
   }
 
   public MedicineDTO convertMedicineToDTO(Medicine medicine) {
-    return new MedicineDTO(medicine.getActiveIngredient(), medicine.getNameAndPackaging(), medicine.getPublicPrice());
+    return new MedicineDTO(medicine.getId(), medicine.getActiveIngredient(), medicine.getNameAndPackaging(), medicine.getPublicPrice());
   }
 
   public Page<MedicineDTO> getSearchedMedicineByActiveIngredient(String search, int page, int size, String orderBy) {
