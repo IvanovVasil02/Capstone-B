@@ -15,9 +15,25 @@ public class MedicinesController {
   MedicinesService ms;
 
   @GetMapping("")
-  public Page<Medicine> getUsers(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "30") int size,
-                                 @RequestParam(defaultValue = "id") String orderBy) {
+  public Page<Medicine> getMedicines(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "30") int size,
+                                     @RequestParam(defaultValue = "id") String orderBy) {
     return ms.getAllMedicines(page, size, orderBy);
+  }
+
+  @GetMapping("/searchByActiveIngredient")
+  public Page<MedicineDTO> SearchMedicineByActiveIngredient(@RequestParam String search,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "30") int size,
+                                                            @RequestParam(defaultValue = "id") String orderBy) {
+    return ms.getSearchedMedicineByActiveIngredient(search, page, size, orderBy);
+  }
+
+  @GetMapping("/searchByName")
+  public Page<MedicineDTO> SearchMedicineByName(@RequestParam String search,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "30") int size,
+                                                @RequestParam(defaultValue = "id") String orderBy) {
+    return ms.getSearchedMedicineByName(search, page, size, orderBy);
   }
 }

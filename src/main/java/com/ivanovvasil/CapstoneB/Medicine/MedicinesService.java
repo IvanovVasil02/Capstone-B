@@ -80,4 +80,16 @@ public class MedicinesService {
     return new MedicineDTO(medicine.getActiveIngredient(), medicine.getNameAndPackaging(), medicine.getPublicPrice());
   }
 
+  public Page<MedicineDTO> getSearchedMedicineByActiveIngredient(String search, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Medicine> medicinePage = mr.findByActiveIngredientIgnoreCaseContaining(search, pageable);
+    return medicinePage.map(this::convertMedicineToDTO);
+  }
+
+  public Page<MedicineDTO> getSearchedMedicineByName(String search, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Medicine> medicinePage = mr.findByName(search, pageable);
+    return medicinePage.map(this::convertMedicineToDTO);
+
+  }
 }
