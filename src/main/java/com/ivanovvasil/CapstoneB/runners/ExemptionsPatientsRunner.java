@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Order(6)
+@Order(7)
 public class ExemptionsPatientsRunner implements ApplicationRunner {
   @Autowired
   PatientsService ps;

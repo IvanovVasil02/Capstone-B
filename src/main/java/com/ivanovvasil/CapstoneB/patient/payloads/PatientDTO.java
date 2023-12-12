@@ -1,5 +1,6 @@
 package com.ivanovvasil.CapstoneB.patient.payloads;
 
+import com.ivanovvasil.CapstoneB.prescription.validator.ValidMunicipality;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
@@ -22,7 +23,7 @@ public record PatientDTO(
 
         @NotEmpty(message = "The address is required.")
         String address,
-        @NotEmpty(message = "The municipality is required.")
+        @ValidMunicipality(message = "The municipality is required.")
         String municipality,
 
         @NotEmpty(message = "The email is required.")

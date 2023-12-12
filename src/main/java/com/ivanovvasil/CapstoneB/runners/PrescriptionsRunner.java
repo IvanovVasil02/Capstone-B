@@ -23,7 +23,7 @@ import java.util.Set;
 import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
-@Order(7)
+@Order(8)
 public class PrescriptionsRunner implements ApplicationRunner {
   @Autowired
   MedicinesService ms;

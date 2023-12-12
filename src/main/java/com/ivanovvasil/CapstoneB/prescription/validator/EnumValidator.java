@@ -3,11 +3,11 @@ package com.ivanovvasil.CapstoneB.prescription.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PriorityValidator implements ConstraintValidator<ValidPriority, String> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
   private Enum<?>[] enums;
 
   @Override
-  public void initialize(ValidPriority constraintAnnotation) {
+  public void initialize(ValidEnum constraintAnnotation) {
     enums = constraintAnnotation.enumClass().getEnumConstants();
   }
 

@@ -21,7 +21,7 @@ import java.util.Random;
 import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
-@Order(4)
+@Order(5)
 public class DoctorsRunner implements ApplicationRunner {
   @Autowired
   DoctorsService ds;

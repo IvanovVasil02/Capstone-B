@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PriorityValidator.class)
-public @interface ValidPriority {
+@Constraint(validatedBy = EnumValidator.class)
+public @interface ValidEnum {
   String message() default "The value entered is invalid";
 
   Class<?>[] groups() default {};

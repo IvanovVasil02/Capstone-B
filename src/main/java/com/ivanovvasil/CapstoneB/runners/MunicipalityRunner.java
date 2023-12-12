@@ -1,21 +1,21 @@
 package com.ivanovvasil.CapstoneB.runners;
 
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
+import com.ivanovvasil.CapstoneB.municipality.MunicipalityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(3)
-public class AslRunner implements CommandLineRunner {
+@Order(1)
+public class MunicipalityRunner implements CommandLineRunner {
   @Autowired
-  ASLService as;
+  MunicipalityService ms;
 
   @Override
   public void run(String... args) throws Exception {
-    String ASLListUrl = "src/main/java/com/ivanovvasil/CapstoneB/ASL/ASLCodes/ASLRegoinCodes.csv";
+    String ASLListUrl = "src/main/java/com/ivanovvasil/CapstoneB/municipality/municipalityList.csv";
 
-    as.readASLFileCsv(ASLListUrl);
+    ms.readMunicipalityFileCsv(ASLListUrl);
   }
 }
