@@ -33,7 +33,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
   PrescriptionsService prs;
   @Autowired
   PrescriptionDetailsRepo prsd;
-  private Boolean executed = false;
+  private Boolean executed = true;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
