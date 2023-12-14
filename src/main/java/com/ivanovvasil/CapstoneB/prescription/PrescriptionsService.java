@@ -80,7 +80,7 @@ public class PrescriptionsService {
             .patient(patient)
             .prescription(patientPrescriptionDTO.prescription())
             .packagesNumber(packagingCount)
-            .region(patient.getRegion())
+            .region(patient.getMunicipality().getRegion())
             .doctor(patient.getDoctor())
             .build();
     this.save(prescription);

@@ -42,4 +42,19 @@ public class DoctorsService {
             .build();
   }
 
+  public DoctorProfileDTO convertToDoctorProfileDTO(Doctor doctor) {
+    return DoctorProfileDTO.builder()
+            .name(doctor.getName())
+            .surname(doctor.getSurname())
+            .birthDate(doctor.getBirthDate())
+            .sex(doctor.getSex())
+            .address(doctor.getAddress())
+            .fiscalCode(doctor.getFiscalCode())
+            .phoneNumber(doctor.getPhoneNumber())
+            .municipality(doctor.getMunicipality().getMunicipality())
+            .email(doctor.getEmail())
+            .doctorId(doctor.getId())
+            .build();
+  }
+
 }

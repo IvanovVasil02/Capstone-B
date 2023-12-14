@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ivanovvasil.CapstoneB.municipality.Municipality;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,8 +35,9 @@ public class User implements UserDetails {
   protected String email;
   protected String password;
   protected String phoneNumber;
-  protected String municipality;
-  protected String region;
+  @ManyToOne
+  @JoinColumn(name = "municipality_id")
+  protected Municipality municipality;
   @Enumerated(EnumType.STRING)
   protected UserRole role;
   @Id
@@ -43,7 +45,7 @@ public class User implements UserDetails {
   private UUID id;
 
 
-  public User(String name, String surname, LocalDate birthDate, String sex, String address, String email, String password, String phoneNumber, String municipality, String region, UserRole role) {
+  public User(String name, String surname, LocalDate birthDate, String sex, String address, Municipality municipality, String email, String password, String phoneNumber, UserRole role) {
     this.name = name;
     this.surname = surname;
     this.birthDate = birthDate;
@@ -54,7 +56,6 @@ public class User implements UserDetails {
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.municipality = municipality;
-    this.region = region;
     this.role = role;
   }
 

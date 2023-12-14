@@ -17,6 +17,10 @@ public class MunicipalityService {
   @Autowired
   MunicipalityRepo mr;
 
+  public Municipality findByIstat(String code) {
+    return mr.findFirstByIstat(code);
+  }
+
   public List<Municipality> getAll() {
     return mr.findAll();
   }
@@ -40,10 +44,11 @@ public class MunicipalityService {
   private Municipality createMunicipality(String[] line) {
     try {
       Municipality municipality = new Municipality();
-      municipality.setMunicipality(line[9]);
-      municipality.setCap(line[5]);
-      municipality.setRegion(line[3]);
-      municipality.setProvince(line[2]);
+      municipality.setMunicipality(line[2]);
+      municipality.setPostalCode(line[4]);
+      municipality.setRegion(line[9]);
+      municipality.setProvince(line[6]);
+      municipality.setIstat(line[0]);
       return municipality;
     } catch (Exception e) {
       throw new RuntimeException("Error creating Municipality", e);
@@ -51,7 +56,10 @@ public class MunicipalityService {
   }
 
   public Boolean existMunicipality(String code) {
-    return mr.existsMunicipalityByCap(code);
+    return mr.existsMunicipalityByPostalCode(code);
   }
 
+  public Municipality findByPostalCode(String code) {
+    return mr.findFirstByPostalCode(code);
+  }
 }

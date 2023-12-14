@@ -23,5 +23,6 @@ public class Municipality {
   private String region;
   private String province;
   private String municipality;
-  private String cap;
+  private String postalCode;
+  private String istat;
 }

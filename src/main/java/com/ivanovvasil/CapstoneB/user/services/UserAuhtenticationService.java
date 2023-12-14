@@ -1,11 +1,11 @@
 package com.ivanovvasil.CapstoneB.user.services;
 
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASL;
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
 import com.ivanovvasil.CapstoneB.exceptions.BadRequestException;
 import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
+import com.ivanovvasil.CapstoneB.municipality.Municipality;
+import com.ivanovvasil.CapstoneB.municipality.MunicipalityService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientDTO;
@@ -35,7 +35,8 @@ public class UserAuhtenticationService {
   @Autowired
   PasswordEncoder bcrypt;
   @Autowired
-  ASLService asls;
+  MunicipalityService ms;
+
 
   public String authenticateUser(UserLoginDTO body) {
     User user = us.findByEmail(body.email());
@@ -51,13 +52,11 @@ public class UserAuhtenticationService {
       throw new BadRequestException("The email " + patient.getEmail() + " is alredy used.");
     });
     Doctor doctor = ds.findById(UUID.fromString(body.doctorId()));
-    ASL asl = asls.getAslByMunicipality(body.municipality());
-    String userHealthCompanyCode = asl.getCompanyCode();
-    String userRegion = asl.getRegionDenomination();
+    Municipality municipality = ms.findByPostalCode(body.postalCode());
     Patient patient = new Patient(body.name(), body.surname(), body.birthDate(),
-            body.sex(), body.address(), body.email(),
-            bcrypt.encode(body.password()), body.phoneNumber(), body.municipality(),
-            userRegion, UserRole.PATIENT, doctor);
+            body.sex(), body.address(), municipality, body.email(),
+            bcrypt.encode(body.password()), body.phoneNumber(),
+            UserRole.PATIENT, doctor);
     return ps.save(patient);
   }
 

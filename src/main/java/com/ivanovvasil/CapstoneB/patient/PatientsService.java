@@ -24,7 +24,7 @@ public class PatientsService {
   ASLService aslService;
 
   public Patient save(Patient patient) {
-    String aslCode = aslService.getAslByMunicipality(patient.getMunicipality()).getCompanyCode();
+    String aslCode = aslService.getAslByMunicipalityIstat(patient.getMunicipality().getIstat()).getCompanyCode();
     patient.setHealthCompanyCode(aslCode);
     return pr.save(patient);
   }
@@ -65,7 +65,7 @@ public class PatientsService {
             .address(patient.getAddress())
             .fiscalCode(patient.getFiscalCode())
             .phoneNumber(patient.getPhoneNumber())
-            .municipality(patient.getMunicipality())
+            .municipality(patient.getMunicipality().getMunicipality())
             .email(patient.getEmail())
             .doctor(patient.getDoctor().getName() + " " + patient.getDoctor().getSurname())
             .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())

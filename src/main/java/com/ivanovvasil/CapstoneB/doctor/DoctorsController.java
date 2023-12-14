@@ -30,6 +30,12 @@ public class DoctorsController {
     return ps.getPatientsList(body);
   }
 
+  @GetMapping("/me")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  public DoctorProfileDTO getDoctorsProfile(@AuthenticationPrincipal Doctor body) {
+    return ds.convertToDoctorProfileDTO(body);
+  }
+
   @GetMapping("/prescriptions")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public List<Prescription> getPrescriptions(@AuthenticationPrincipal Doctor doctor) {

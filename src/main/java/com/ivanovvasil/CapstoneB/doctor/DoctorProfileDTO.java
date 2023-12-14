@@ -1,11 +1,15 @@
-package com.ivanovvasil.CapstoneB.patient.payloads;
+package com.ivanovvasil.CapstoneB.doctor;
 
 import com.ivanovvasil.CapstoneB.prescription.validator.ValidMunicipality;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
-public record PatientDTO(
+@Builder
+public record DoctorProfileDTO(
+        UUID doctorId,
         @NotEmpty(message = "The name is required.")
         String name,
 
@@ -24,13 +28,12 @@ public record PatientDTO(
         @NotEmpty(message = "The address is required.")
         String address,
         @ValidMunicipality(message = "The municipality is required.")
-        String postalCode,
+        String municipality,
 
         @NotEmpty(message = "The email is required.")
         String email,
         @NotEmpty(message = "The password is required.")
         String password,
         @NotEmpty(message = "The phone number is required.")
-        String phoneNumber,
-        String doctorId) {
+        String phoneNumber) {
 }

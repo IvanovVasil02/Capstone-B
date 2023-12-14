@@ -24,6 +24,6 @@ public class ASL {
   private String regionDenomination;
   private String companyCode;
   private String companyDenomination;
-  private String municipalityCode;
+  private String municipalityIstat;
   private String municipalityDenomination;
 }

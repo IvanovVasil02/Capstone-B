@@ -16,7 +16,7 @@ public class MunicipalityValidator implements ConstraintValidator<ValidMunicipal
     if (value == null) {
       return false;
     } else {
-      return mr.existsMunicipalityByCap(value);
+      return mr.existsMunicipalityByPostalCode(value);
     }
   }
 }

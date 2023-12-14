@@ -5,5 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
 public interface MunicipalityRepo extends JpaRepository<Municipality, UUID> {
-  Boolean existsMunicipalityByCap(String code);
+
+  Municipality findFirstByIstat(String code);
+
+  Boolean existsMunicipalityByPostalCode(String code);
+
+
+  Municipality findFirstByPostalCode(String code);
 }

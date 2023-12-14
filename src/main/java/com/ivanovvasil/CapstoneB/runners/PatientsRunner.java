@@ -1,10 +1,10 @@
 package com.ivanovvasil.CapstoneB.runners;
 
 import com.github.javafaker.Faker;
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASL;
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
+import com.ivanovvasil.CapstoneB.municipality.Municipality;
+import com.ivanovvasil.CapstoneB.municipality.MunicipalityService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.user.UserRole;
@@ -29,7 +29,7 @@ public class PatientsRunner implements ApplicationRunner {
   @Autowired
   DoctorsService ds;
   @Autowired
-  ASLService as;
+  MunicipalityService ms;
   @Autowired
   PasswordEncoder bcrypt;
   private boolean executed = true;
@@ -38,22 +38,21 @@ public class PatientsRunner implements ApplicationRunner {
   public void run(ApplicationArguments args) throws Exception {
     if (!executed) {
       Faker faker = new Faker(Locale.ITALY);
-      List<ASL> aslList = as.getAll();
+      List<Municipality> municipalities = ms.getAll();
       List<Doctor> doctorList = ds.getAll();
       String[] sex = {"M", "F"};
 
       for (int i = 0; i < 50; i++) {
-        ASL asl = aslList.get(new Random().nextInt(0, aslList.size() - 1));
+        Municipality municipality = municipalities.get(new Random().nextInt(0, municipalities.size() - 1));
         Patient patient = new Patient(faker.name().firstName(),
                 faker.name().lastName(),
                 getRandomLocalDate(),
                 sex[new Random().nextInt(0, 1)],
                 faker.address().streetAddress(),
+                municipality,
                 faker.internet().emailAddress(),
                 bcrypt.encode("12345"),
                 faker.phoneNumber().phoneNumber(),
-                asl.getMunicipalityDenomination(),
-                asl.getRegionDenomination(),
                 UserRole.PATIENT,
                 doctorList.get(new Random().nextInt(0, doctorList.size() - 1))
         );
