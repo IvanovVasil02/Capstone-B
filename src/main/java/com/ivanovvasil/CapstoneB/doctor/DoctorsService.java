@@ -32,4 +32,29 @@ public class DoctorsService {
   public List<Doctor> getAll() {
     return dr.findAll();
   }
+
+  public DoctorDTO convertToDoctorDTO(Doctor doctor) {
+    return DoctorDTO.builder()
+            .name(doctor.getName())
+            .surname(doctor.getSurname())
+            .fiscalCode(doctor.getFiscalCode())
+            .doctorId(doctor.getId())
+            .build();
+  }
+
+  public DoctorProfileDTO convertToDoctorProfileDTO(Doctor doctor) {
+    return DoctorProfileDTO.builder()
+            .name(doctor.getName())
+            .surname(doctor.getSurname())
+            .birthDate(doctor.getBirthDate())
+            .sex(doctor.getSex())
+            .address(doctor.getAddress())
+            .fiscalCode(doctor.getFiscalCode())
+            .phoneNumber(doctor.getPhoneNumber())
+            .municipality(doctor.getMunicipality().getMunicipality())
+            .email(doctor.getEmail())
+            .doctorId(doctor.getId())
+            .build();
+  }
+
 }

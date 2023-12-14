@@ -2,6 +2,7 @@ package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
+import com.ivanovvasil.CapstoneB.municipality.Municipality;
 import com.ivanovvasil.CapstoneB.user.User;
 import com.ivanovvasil.CapstoneB.user.UserRole;
 import jakarta.persistence.*;
@@ -21,15 +22,15 @@ public class Patient extends User {
   @JoinColumn(name = "user_doctor_id")
   private Doctor doctor;
   private String healthCompanyCode;
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
           name = "patients_exemptions",
           joinColumns = @JoinColumn(name = "patient_id"),
           inverseJoinColumns = @JoinColumn(name = "exemption_id"))
   private List<Exemption> exemptions;
 
-  public Patient(String name, String surname, LocalDate birthDate, String sex, String address, String email, String password, String phoneNumber, String municipality, String region, UserRole role, Doctor doctor) {
-    super(name, surname, birthDate, sex, address, email, password, phoneNumber, municipality, region, role);
+  public Patient(String name, String surname, LocalDate birthDate, String sex, String address, Municipality municipality, String email, String password, String phoneNumber, UserRole role, Doctor doctor) {
+    super(name, surname, birthDate, sex, address, municipality, email, password, phoneNumber, role);
     this.doctor = doctor;
   }
 
@@ -48,7 +49,6 @@ public class Patient extends User {
             ", password='" + password + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", municipality='" + municipality + '\'' +
-            ", region='" + region + '\'' +
             ", role=" + role +
             "} " + super.toString();
   }

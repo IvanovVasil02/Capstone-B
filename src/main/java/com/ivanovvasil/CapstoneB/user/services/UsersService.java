@@ -1,6 +1,8 @@
-package com.ivanovvasil.CapstoneB.user;
+package com.ivanovvasil.CapstoneB.user.services;
 
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
+import com.ivanovvasil.CapstoneB.user.User;
+import com.ivanovvasil.CapstoneB.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class UsersService {
   }
 
   public User findByEmail(String email) {
-    return ur.findByEmail(email);
+    return ur.findByEmail(email).orElseThrow(() -> new NotFoundException("email does not exist: " + email));
   }
 
 

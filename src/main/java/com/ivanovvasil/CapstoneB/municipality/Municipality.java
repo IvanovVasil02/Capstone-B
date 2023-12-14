@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.ASL.ASLCodes;
+package com.ivanovvasil.CapstoneB.municipality;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,14 +16,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ASL {
+public class Municipality {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
-  private String regionCode;
-  private String regionDenomination;
-  private String companyCode;
-  private String companyDenomination;
-  private String municipalityIstat;
-  private String municipalityDenomination;
+  private String region;
+  private String province;
+  private String municipality;
+  private String postalCode;
+  private String istat;
 }

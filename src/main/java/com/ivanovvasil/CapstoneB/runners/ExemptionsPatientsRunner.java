@@ -1,7 +1,9 @@
-package com.ivanovvasil.CapstoneB.ASL.exemption;
+package com.ivanovvasil.CapstoneB.runners;
 
+import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
+import com.ivanovvasil.CapstoneB.ASL.exemption.ExemptionsService;
 import com.ivanovvasil.CapstoneB.patient.Patient;
-import com.ivanovvasil.CapstoneB.patient.services.PatientsService;
+import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Order(6)
+@Order(7)
 public class ExemptionsPatientsRunner implements ApplicationRunner {
   @Autowired
   PatientsService ps;

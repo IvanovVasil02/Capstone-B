@@ -1,5 +1,6 @@
 package com.ivanovvasil.CapstoneB.ASL.ASLCodes;
 
+import com.ivanovvasil.CapstoneB.municipality.MunicipalityService;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -16,6 +17,9 @@ import java.util.List;
 public class ASLService {
   @Autowired
   ASLDataRepo ar;
+
+  @Autowired
+  MunicipalityService ms;
 
   public List<ASL> getAll() {
     return ar.findAll();
@@ -44,7 +48,7 @@ public class ASLService {
       asl.setRegionDenomination(line[2].trim());
       asl.setCompanyCode(line[3].trim());
       asl.setCompanyDenomination(line[4].trim());
-      asl.setMunicipalityCode(line[5].trim());
+      asl.setMunicipalityIstat(line[5].trim());
       asl.setMunicipalityDenomination(line[6].trim());
       return asl;
     } catch (Exception e) {
@@ -52,12 +56,7 @@ public class ASLService {
     }
   }
 
-  public String getAslCodeByRegionName(String region) {
-    ASL aslCode = ar.findByRegionDenominationLike(region);
-    return aslCode.getCompanyCode();
-  }
-
-  public ASL getAslByMunicipality(String municipality) {
-    return ar.findByMunicipality(municipality);
+  public ASL getAslByMunicipalityIstat(String code) {
+    return ar.findByMunicipalityIstat(code);
   }
 }

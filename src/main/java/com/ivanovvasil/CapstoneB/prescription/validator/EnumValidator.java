@@ -3,11 +3,11 @@ package com.ivanovvasil.CapstoneB.prescription.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class TypeRecipeValidator implements ConstraintValidator<ValidTypeRecipe, String> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
   private Enum<?>[] enums;
 
   @Override
-  public void initialize(ValidTypeRecipe constraintAnnotation) {
+  public void initialize(ValidEnum constraintAnnotation) {
     enums = constraintAnnotation.enumClass().getEnumConstants();
   }
 
@@ -20,6 +20,9 @@ public class TypeRecipeValidator implements ConstraintValidator<ValidTypeRecipe,
         }
       }
     }
+    if (value == null) {
+      return true;
+    }
     for (Enum<?> enumValue : enums) {
       if (enumValue.name().equals(value)) {
         return true;
@@ -28,4 +31,3 @@ public class TypeRecipeValidator implements ConstraintValidator<ValidTypeRecipe,
     return false;
   }
 }
-
