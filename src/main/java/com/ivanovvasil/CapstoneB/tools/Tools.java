@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.tools;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Random;
 
 
@@ -11,11 +12,35 @@ public class Tools {
     LocalDate startDate = LocalDate.of(1980, 1, 1);
     LocalDate endDate = LocalDate.now();
 
-    long giorniInizio = startDate.toEpochDay();
-    long giorniFine = endDate.toEpochDay();
+    long epochStartDate = startDate.toEpochDay();
+    long epochEndDate = endDate.toEpochDay();
 
     Random random = new Random();
-    long giorniCasuali = giorniInizio + random.nextLong(giorniFine - giorniInizio);
+    long giorniCasuali = epochStartDate + random.nextLong(epochEndDate - epochStartDate);
+
+    return LocalDate.ofEpochDay(giorniCasuali);
+  }
+
+  public static LocalTime generateRandomLocalTime() {
+    Random random = new Random();
+
+    int hour = random.nextInt(24);       // da 0 a 23
+    int minute = random.nextInt(60);     // da 0 a 59
+    int second = random.nextInt(60);     // da 0 a 59
+    int nano = random.nextInt(1_000_000_000); // da 0 a 999_999_999
+
+    return LocalTime.of(hour, minute, second, nano);
+  }
+
+  public static LocalDate getRandomLocalCurentDate() {
+    LocalDate startDate = LocalDate.of(2023, 1, 1);
+    LocalDate endDate = LocalDate.now();
+
+    long epochStartDate = startDate.toEpochDay();
+    long epochEndDate = endDate.toEpochDay();
+
+    Random random = new Random();
+    long giorniCasuali = epochStartDate + random.nextLong(epochEndDate - epochStartDate);
 
     return LocalDate.ofEpochDay(giorniCasuali);
   }

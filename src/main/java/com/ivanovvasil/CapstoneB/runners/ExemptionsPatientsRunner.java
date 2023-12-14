@@ -21,7 +21,7 @@ public class ExemptionsPatientsRunner implements ApplicationRunner {
   PatientsService ps;
   @Autowired
   ExemptionsService es;
-  private boolean executed = true;
+  private boolean executed = false;
 
 
   @Override
