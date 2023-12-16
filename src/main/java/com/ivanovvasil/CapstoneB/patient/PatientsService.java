@@ -3,9 +3,12 @@ package com.ivanovvasil.CapstoneB.patient;
 import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
+import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
+import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +25,12 @@ public class PatientsService {
   PatientsRepo pr;
   @Autowired
   ASLService aslService;
+  @Autowired
+  DoctorsService ds;
+
+  @Autowired
+  @Lazy
+  PrescriptionsService prs;
 
   public Patient save(Patient patient) {
     String aslCode = aslService.getAslByMunicipalityIstat(patient.getMunicipality().getIstat()).getCompanyCode();
@@ -67,7 +76,8 @@ public class PatientsService {
             .phoneNumber(patient.getPhoneNumber())
             .municipality(patient.getMunicipality().getMunicipality())
             .email(patient.getEmail())
-            .doctor(patient.getDoctor().getName() + " " + patient.getDoctor().getSurname())
+            .doctor(ds.convertToDoctorProfileDTO(patient.getDoctor()))
+            .prescriptionList(prs.getPatientsPrescriptions(patient))
             .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())
             .build();
   }

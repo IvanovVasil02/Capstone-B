@@ -1,5 +1,7 @@
 package com.ivanovvasil.CapstoneB.patient.payloads;
 
+import com.ivanovvasil.CapstoneB.doctor.DoctorProfileDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -22,6 +24,7 @@ public record PatientResponseDTO(
 
         String email,
         String phoneNumber,
-        String doctor,
-        List<String> exemptions) {
+        DoctorProfileDTO doctor,
+        List<String> exemptions,
+        List<PrescriptionDTO> prescriptionList) {
 }

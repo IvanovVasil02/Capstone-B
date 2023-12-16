@@ -137,8 +137,12 @@ public class PrescriptionsService {
 
   public Page<PrescriptionDTO> getPatientsPrescriptions(Patient currentPatient, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Prescription> medicinePage = pr.findAllByPatientId(currentPatient.getId(), pageable);
-    return medicinePage.map(this::convertToPrescriptionDTO);
+    Page<Prescription> prescriptionPage = pr.findAllByPatientId(currentPatient.getId(), pageable);
+    return prescriptionPage.map(this::convertToPrescriptionDTO);
+  }
 
+  public List<PrescriptionDTO> getPatientsPrescriptions(Patient currentPatient) {
+    List<Prescription> prescriptionList = pr.findAllByPatientId(currentPatient.getId());
+    return prescriptionList.stream().map(this::convertToPrescriptionDTO).toList();
   }
 }
