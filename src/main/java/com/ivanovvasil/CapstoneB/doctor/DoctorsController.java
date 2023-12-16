@@ -24,6 +24,11 @@ public class DoctorsController {
   @Autowired
   PrescriptionsService prs;
 
+  @GetMapping("")
+  public List<DoctorDTO> getAll() {
+    return ds.getAll().stream().map(doctor -> ds.convertToDoctorDTO(doctor)).toList();
+  }
+
   @GetMapping("/patients")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public List<PatientResponseDTO> getDoctorPatientsList(@AuthenticationPrincipal Doctor body) {
