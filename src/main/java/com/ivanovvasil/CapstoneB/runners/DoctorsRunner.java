@@ -45,6 +45,7 @@ public class DoctorsRunner implements ApplicationRunner {
                 getRandomLocalDate(),
                 sex[new Random().nextInt(0, 1)],
                 faker.address().streetAddress(),
+                faker.address().streetAddress(),
                 municipality,
                 faker.internet().emailAddress(),
                 bcrypt.encode("12345"),
