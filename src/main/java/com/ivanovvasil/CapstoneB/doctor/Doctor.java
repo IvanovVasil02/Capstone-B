@@ -20,6 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Doctor extends User {
+  private String studioAddress;
   private String professionalRegistrationNumber;
   private String medicalLicenseNumber;
   private LocalDate expirationOfLicense;
@@ -27,8 +28,9 @@ public class Doctor extends User {
   @OneToMany(mappedBy = "doctor")
   private Set<Appointment> appointments;
 
-  public Doctor(String name, String surname, LocalDate birthDate, String sex, String address, Municipality municipality, String email, String password, String phoneNumber, String professionalRegistrationNumber, String medicalLicenseNumber, LocalDate expirationOfLicense, String emergencyContact, UserRole role) {
+  public Doctor(String name, String surname, LocalDate birthDate, String sex, String address, String studioAddress, Municipality municipality, String email, String password, String phoneNumber, String professionalRegistrationNumber, String medicalLicenseNumber, LocalDate expirationOfLicense, String emergencyContact, UserRole role) {
     super(name, surname, birthDate, sex, address, municipality, email, password, phoneNumber, role);
+    this.studioAddress = studioAddress;
     this.professionalRegistrationNumber = professionalRegistrationNumber;
     this.medicalLicenseNumber = medicalLicenseNumber;
     this.expirationOfLicense = expirationOfLicense;

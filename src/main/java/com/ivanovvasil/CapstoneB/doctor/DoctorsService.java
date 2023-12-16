@@ -48,7 +48,7 @@ public class DoctorsService {
             .surname(doctor.getSurname())
             .birthDate(doctor.getBirthDate())
             .sex(doctor.getSex())
-            .address(doctor.getAddress())
+            .address(doctor.getStudioAddress())
             .fiscalCode(doctor.getFiscalCode())
             .phoneNumber(doctor.getPhoneNumber())
             .municipality(doctor.getMunicipality().getMunicipality())

@@ -29,7 +29,7 @@ public class DoctorsRunner implements ApplicationRunner {
   MunicipalityService ms;
   @Autowired
   PasswordEncoder bcrypt;
-  private boolean executed = true;
+  private boolean executed = false;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -44,6 +44,7 @@ public class DoctorsRunner implements ApplicationRunner {
                 faker.name().lastName(),
                 getRandomLocalDate(),
                 sex[new Random().nextInt(0, 1)],
+                faker.address().streetAddress(),
                 faker.address().streetAddress(),
                 municipality,
                 faker.internet().emailAddress(),

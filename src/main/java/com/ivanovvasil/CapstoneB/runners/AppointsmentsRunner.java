@@ -28,7 +28,7 @@ public class AppointsmentsRunner implements ApplicationRunner {
   @Autowired
   AppointmentsService as;
 
-  private Boolean executed = true;
+  private Boolean executed = false;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
