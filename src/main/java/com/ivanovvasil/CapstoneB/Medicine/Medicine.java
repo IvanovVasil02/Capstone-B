@@ -23,10 +23,10 @@ public class Medicine {
   private UUID id;
   private String activeIngredient;
   private String groupDescription;
-  private String nameAndPackaging;
+  private String medicineName;
   private String publicPrice;
   private String holderOfMarketingAuthorization;
-  private String MarketingAuthorization;
+  private String identificationCode;
   private String xInAifaTransparencyList;
   private String xInRegionList;
   private String cubicMetersOxygen;

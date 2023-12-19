@@ -42,7 +42,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
       List<Patient> patientList = ps.getAllPatients();
       List<Medicine> medicineList = ms.getAllMedicines();
 
-      for (int i = 0; i < 50; i++) {
+      for (int i = 0; i < 200; i++) {
         Patient currentPatient = patientList.get(new Random().nextInt(0, patientList.size()));
         Set<PrescriptionDetails> prescriptionDetailsSet = new HashSet<>();
 

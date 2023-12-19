@@ -21,19 +21,21 @@ public class MedicinesController {
     return ms.getAllMedicines(page, size, orderBy);
   }
 
-  @GetMapping("/searchByActiveIngredient")
-  public Page<MedicineDTO> SearchMedicineByActiveIngredient(@RequestParam String search,
+  @GetMapping("/search/activeIngredient")
+  public Page<MedicineDTO> SearchMedicineByActiveIngredient(@RequestParam String q,
                                                             @RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "30") int size,
                                                             @RequestParam(defaultValue = "id") String orderBy) {
-    return ms.getSearchedMedicineByActiveIngredient(search, page, size, orderBy);
+    return ms.getSearchedMedicineByActiveIngredient(q, page, size, orderBy);
   }
 
-  @GetMapping("/searchByName")
-  public Page<MedicineDTO> SearchMedicineByName(@RequestParam String search,
-                                                @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "30") int size,
-                                                @RequestParam(defaultValue = "id") String orderBy) {
-    return ms.getSearchedMedicineByName(search, page, size, orderBy);
+  @GetMapping("/search/medicineName")
+  public Page<MedicineDTO> SearchMedicineByMedicineName(@RequestParam String q,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "30") int size,
+                                                        @RequestParam(defaultValue = "id") String orderBy) {
+    return ms.getSearchedMedicineByMedicineName(q, page, size, orderBy);
   }
+
+
 }

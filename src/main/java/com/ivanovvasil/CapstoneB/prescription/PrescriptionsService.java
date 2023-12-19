@@ -145,4 +145,6 @@ public class PrescriptionsService {
     List<Prescription> prescriptionList = pr.findAllByPatientId(currentPatient.getId());
     return prescriptionList.stream().map(this::convertToPrescriptionDTO).toList();
   }
+
+
 }

@@ -62,10 +62,10 @@ public class MedicinesService {
       Medicine medicine = new Medicine();
       medicine.setActiveIngredient(line[0]);
       medicine.setGroupDescription(line[1]);
-      medicine.setNameAndPackaging(line[2]);
+      medicine.setMedicineName(line[2]);
       medicine.setPublicPrice(line[3]);
       medicine.setHolderOfMarketingAuthorization(line[4]);
-      medicine.setMarketingAuthorization(line[5]);
+      medicine.setIdentificationCode(line[5]);
       medicine.setXInAifaTransparencyList(line[6]);
       medicine.setXInRegionList(line[7]);
       medicine.setCubicMetersOxygen(line[8]);
@@ -76,9 +76,6 @@ public class MedicinesService {
 
   }
 
-  public MedicineDTO convertMedicineToDTO(Medicine medicine) {
-    return new MedicineDTO(medicine.getId(), medicine.getActiveIngredient(), medicine.getNameAndPackaging(), medicine.getPublicPrice());
-  }
 
   public Page<MedicineDTO> getSearchedMedicineByActiveIngredient(String search, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
@@ -86,10 +83,21 @@ public class MedicinesService {
     return medicinePage.map(this::convertMedicineToDTO);
   }
 
-  public Page<MedicineDTO> getSearchedMedicineByName(String search, int page, int size, String orderBy) {
+  public Page<MedicineDTO> getSearchedMedicineByMedicineName(String search, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Medicine> medicinePage = mr.findByName(search, pageable);
+    Page<Medicine> medicinePage = mr.findByMedicineNameContainingIgnoreCase(search, pageable);
     return medicinePage.map(this::convertMedicineToDTO);
+  }
 
+  public MedicineDTO convertMedicineToDTO(Medicine medicine) {
+    return MedicineDTO
+            .builder()
+            .medicineId(medicine.getId())
+            .nameAndPackaging(medicine.getMedicineName())
+            .activeIngredient(medicine.getActiveIngredient())
+            .holderOfMarketingAuthorization(medicine.getHolderOfMarketingAuthorization())
+            .identificationCode(medicine.getIdentificationCode())
+            .publicPrice(medicine.getPublicPrice())
+            .build();
   }
 }
