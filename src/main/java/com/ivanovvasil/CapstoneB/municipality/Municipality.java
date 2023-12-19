@@ -1,6 +1,5 @@
-package com.ivanovvasil.CapstoneB.exemption;
+package com.ivanovvasil.CapstoneB.municipality;
 
-import com.ivanovvasil.CapstoneB.patient.Patient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,10 +16,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Exemption {
+public class Municipality {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
-  private Patient patient;
-  private String exemptionCode;
+  private String region;
+  private String province;
+  private String municipality;
+  private String postalCode;
+  private String istat;
 }

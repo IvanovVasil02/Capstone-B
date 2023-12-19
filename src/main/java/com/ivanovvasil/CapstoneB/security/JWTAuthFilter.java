@@ -1,8 +1,8 @@
 package com.ivanovvasil.CapstoneB.security;
 
-import Buildweek2.exceptions.UnauthorizedException;
-import Buildweek2.user.User;
-import Buildweek2.user.UserService;
+import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
+import com.ivanovvasil.CapstoneB.user.User;
+import com.ivanovvasil.CapstoneB.user.services.UsersService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +16,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
@@ -23,7 +24,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
   private JWTTools jwtTools;
 
   @Autowired
-  private UserService userService;
+  private UsersService userService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,17 +35,17 @@ public class JWTAuthFilter extends OncePerRequestFilter {
       String token = authHeader.substring(7);
       jwtTools.verifyToken(token);
       String id = jwtTools.extractIdFroToken(token);
-      User currentUser = userService.getById(Long.valueOf(id));
-
+      User currentUser = userService.findById(UUID.fromString(id));
       Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(authentication);
-
       filterChain.doFilter(request, response);
     }
   }
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-    return new AntPathMatcher().match("/auth/**", request.getServletPath());
+    AntPathMatcher pathMatcher = new AntPathMatcher();
+    return pathMatcher.match("/authentication/**", request.getServletPath()) ||
+            pathMatcher.match("/doctors", request.getServletPath());
   }
 }

@@ -1,18 +1,18 @@
 package com.ivanovvasil.CapstoneB.Medicine;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ivanovvasil.CapstoneB.prescription.PrescriptionDetails;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.rmi.server.UID;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Table(name = "medicines")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -23,11 +23,13 @@ public class Medicine {
   private UUID id;
   private String activeIngredient;
   private String groupDescription;
-  private String nameAndPackaginf;
+  private String medicineName;
   private String publicPrice;
   private String holderOfMarketingAuthorization;
-  private String MarketingAuthorization;
+  private String identificationCode;
   private String xInAifaTransparencyList;
   private String xInRegionList;
   private String cubicMetersOxygen;
+  @OneToMany(mappedBy = "medicine")
+  private Set<PrescriptionDetails> prescriptionList = new HashSet<>();
 }
