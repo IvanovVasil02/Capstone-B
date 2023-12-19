@@ -47,4 +47,10 @@ public class AppointmentsService {
             .patient(ps.convertPatientResponse(appointment.getPatient()))
             .build();
   }
+
+  public Page<AppointmentDTO> getPatientsAppointment(Patient currentPatient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Appointment> appointmentPage = ar.findByPatient(currentPatient, pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
+  }
 }

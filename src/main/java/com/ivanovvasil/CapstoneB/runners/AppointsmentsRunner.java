@@ -37,7 +37,7 @@ public class AppointsmentsRunner implements ApplicationRunner {
       List<Patient> patientList = ps.getAllPatients();
       List<Doctor> doctorList = ds.getAll();
 
-      for (int i = 0; i < 50; i++) {
+      for (int i = 0; i < 200; i++) {
         Patient patient = patientList.get(new Random().nextInt(0, patientList.size() - 1));
         Doctor doctor = doctorList.get(new Random().nextInt(0, doctorList.size() - 1));
 
