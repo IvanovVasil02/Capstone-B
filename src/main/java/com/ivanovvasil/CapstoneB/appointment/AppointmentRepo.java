@@ -14,4 +14,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, UUID> {
   Page<Appointment> findByDoctor(Doctor doctor, Pageable pageable);
 
   Page<Appointment> findByPatient(Patient patient, Pageable pageable);
+
+  Page<Appointment> findByDoctorId(UUID id, Pageable pageable);
 }

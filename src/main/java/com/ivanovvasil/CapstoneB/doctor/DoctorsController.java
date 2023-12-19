@@ -1,5 +1,7 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
+import com.ivanovvasil.CapstoneB.appointment.AppointmentDTO;
+import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;
@@ -7,6 +9,7 @@ import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,9 @@ public class DoctorsController {
   PatientsService ps;
   @Autowired
   PrescriptionsService prs;
+
+  @Autowired
+  AppointmentsService as;
 
   @GetMapping("")
   public List<DoctorDTO> getAll() {
@@ -41,10 +47,22 @@ public class DoctorsController {
     return ds.convertToDoctorProfileDTO(body);
   }
 
+  @GetMapping("/appointments")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Doctor doctor,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "30") int size,
+                                              @RequestParam(defaultValue = "id") String orderBy) {
+    return as.getDoctorAppointments(doctor, page, size, orderBy);
+  }
+
   @GetMapping("/prescriptions")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public List<Prescription> getPrescriptions(@AuthenticationPrincipal Doctor doctor) {
-    return prs.getPrescriptions(doctor);
+  public Page<PrescriptionDTO> getPrescriptions(@AuthenticationPrincipal Doctor doctor,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "30") int size,
+                                                @RequestParam(defaultValue = "id") String orderBy) {
+    return prs.getDoctorPrescriptions(doctor, page, size, orderBy);
   }
 
   @GetMapping("/prescriptionsToApp")

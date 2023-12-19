@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.patient.payloads;
 
 import com.ivanovvasil.CapstoneB.doctor.DoctorProfileDTO;
+import com.ivanovvasil.CapstoneB.user.UserRole;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public record PatientResponseDTO(
         String email,
         String phoneNumber,
         DoctorProfileDTO doctor,
-        List<String> exemptions
+        List<String> exemptions,
+        UserRole role
 ) {
 }

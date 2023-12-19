@@ -38,6 +38,19 @@ public class AppointmentsService {
     return appointmentPage.map(this::convertAppointmentToDTO);
   }
 
+
+  public Page<AppointmentDTO> getPatientsAppointment(Patient currentPatient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Appointment> appointmentPage = ar.findByPatient(currentPatient, pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
+  }
+
+  public Page<AppointmentDTO> getDoctorAppointments(Doctor doctor, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Appointment> AppointmentPage = ar.findByDoctorId(doctor.getId(), pageable);
+    return AppointmentPage.map(this::convertAppointmentToDTO);
+  }
+
   public AppointmentDTO convertAppointmentToDTO(Appointment appointment) {
     return AppointmentDTO.builder()
             .id(appointment.getId())
@@ -46,11 +59,5 @@ public class AppointmentsService {
             .doctor(ds.convertToDoctorDTO(appointment.getDoctor()))
             .patient(ps.convertPatientResponse(appointment.getPatient()))
             .build();
-  }
-
-  public Page<AppointmentDTO> getPatientsAppointment(Patient currentPatient, int page, int size, String orderBy) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Appointment> appointmentPage = ar.findByPatient(currentPatient, pageable);
-    return appointmentPage.map(this::convertAppointmentToDTO);
   }
 }

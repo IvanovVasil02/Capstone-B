@@ -108,8 +108,10 @@ public class PrescriptionsService {
   }
 
 
-  public List<Prescription> getPrescriptions(Doctor doctor) {
-    return pr.findByDoctorId(doctor.getId());
+  public Page<PrescriptionDTO> getDoctorPrescriptions(Doctor doctor, int page, int size, String order) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+    Page<Prescription> prescriptionPage = pr.findByDoctorId(doctor.getId(), pageable);
+    return prescriptionPage.map(this::convertToPrescriptionDTO);
   }
 
   public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {

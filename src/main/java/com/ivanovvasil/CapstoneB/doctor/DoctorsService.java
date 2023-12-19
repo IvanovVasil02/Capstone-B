@@ -54,6 +54,7 @@ public class DoctorsService {
             .municipality(doctor.getMunicipality().getMunicipality())
             .email(doctor.getEmail())
             .doctorId(doctor.getId())
+            .role(doctor.getRole())
             .build();
   }
 

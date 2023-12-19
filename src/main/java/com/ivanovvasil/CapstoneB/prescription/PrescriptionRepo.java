@@ -20,5 +20,5 @@ public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
   @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'IN_ATTESA'")
   List<Prescription> getPrescriptionsToApprove(@Param("id") UUID id);
 
-  List<Prescription> findByDoctorId(UUID id);
+  Page<Prescription> findByDoctorId(UUID id, Pageable pageable);
 }

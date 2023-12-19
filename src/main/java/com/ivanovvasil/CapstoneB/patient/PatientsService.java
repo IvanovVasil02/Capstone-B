@@ -25,7 +25,7 @@ public class PatientsService {
   ASLService aslService;
   @Autowired
   DoctorsService ds;
-  
+
   public Patient save(Patient patient) {
     String aslCode = aslService.getAslByMunicipalityIstat(patient.getMunicipality().getIstat()).getCompanyCode();
     patient.setHealthCompanyCode(aslCode);
@@ -72,6 +72,7 @@ public class PatientsService {
             .email(patient.getEmail())
             .doctor(ds.convertToDoctorProfileDTO(patient.getDoctor()))
             .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())
+            .role(patient.getRole())
             .build();
   }
 

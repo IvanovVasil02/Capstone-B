@@ -1,5 +1,6 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
+import com.ivanovvasil.CapstoneB.user.UserRole;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -22,5 +23,6 @@ public record DoctorProfileDTO(
         String municipality,
 
         String email,
-        String phoneNumber) {
+        String phoneNumber,
+        UserRole role) {
 }
