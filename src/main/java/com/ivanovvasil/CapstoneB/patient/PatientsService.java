@@ -4,6 +4,7 @@ import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.ASL.exemption.Exemption;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
+import com.ivanovvasil.CapstoneB.exceptions.BadRequestException;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class PatientsService {
     return pr.findByEmailIgnoreCase(email).orElseThrow(() -> new NotFoundException(email));
   }
 
+  public Page<PatientResponseDTO> searchPatients(String q, String by, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    if (by.equals("fiscalCode")) {
+      Page<Patient> patients = pr.findByFiscalCodeStartingWithIgnoreCase(q, pageable);
+      return patients.map(this::convertPatientResponse);
+    } else if (by.equals("name")) {
+      Page<Patient> patients = pr.findByNameStartingWithIgnoreCase(q, pageable);
+      return patients.map(this::convertPatientResponse);
+    }
+    throw new BadRequestException("There is a problem whit the query!");
+  }
+
   public void delete(UUID id) {
     Patient toRemove = this.getPatientById(id);
     pr.delete(toRemove);
@@ -75,6 +88,4 @@ public class PatientsService {
             .role(patient.getRole())
             .build();
   }
-
-
 }

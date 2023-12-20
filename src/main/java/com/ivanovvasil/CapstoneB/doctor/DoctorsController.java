@@ -60,6 +60,7 @@ public class DoctorsController {
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Page<PrescriptionDTO> getPrescriptions(@AuthenticationPrincipal Doctor doctor,
                                                 @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam String ric,
                                                 @RequestParam(defaultValue = "30") int size,
                                                 @RequestParam(defaultValue = "id") String orderBy) {
     return prs.getDoctorPrescriptions(doctor, page, size, orderBy);

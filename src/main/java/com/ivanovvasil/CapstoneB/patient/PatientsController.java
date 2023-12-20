@@ -28,6 +28,15 @@ public class PatientsController {
   public PatientResponseDTO getProfile(@AuthenticationPrincipal Patient currentPatient) {
     return ps.convertPatientResponse(currentPatient);
   }
+  
+  @GetMapping("/search")
+  public Page<PatientResponseDTO> SearchMedicineByActiveIngredient(@RequestParam String q,
+                                                                   @RequestParam String by,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "30") int size,
+                                                                   @RequestParam(defaultValue = "id") String orderBy) {
+    return ps.searchPatients(q, by, page, size, orderBy);
+  }
 
   @GetMapping("/prescriptions")
   @ResponseStatus(HttpStatus.OK)
