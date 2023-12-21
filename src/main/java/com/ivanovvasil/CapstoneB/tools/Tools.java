@@ -3,6 +3,7 @@ package com.ivanovvasil.CapstoneB.tools;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Tools {
@@ -12,13 +13,14 @@ public class Tools {
     LocalDate startDate = LocalDate.of(1980, 1, 1);
     LocalDate endDate = LocalDate.now();
 
-    long epochStartDate = startDate.toEpochDay();
-    long epochEndDate = endDate.toEpochDay();
+    long startEpochDay = startDate.toEpochDay();
+    long endEpochDay = endDate.toEpochDay();
 
     Random random = new Random();
-    long giorniCasuali = epochStartDate + random.nextLong(epochEndDate - epochStartDate);
+    long randomEpochDay = ThreadLocalRandom.current().nextLong(startEpochDay, endEpochDay + 1);
 
-    return LocalDate.ofEpochDay(giorniCasuali);
+    return LocalDate.ofEpochDay(randomEpochDay);
+
   }
 
   public static LocalTime generateRandomLocalTime() {
