@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -21,10 +22,13 @@ public class Appointment {
   private UUID id;
   private LocalDate date;
   private LocalTime time;
+  private LocalDateTime timeRequest;
   @ManyToOne
   @JoinColumn(name = "patient_id")
   private Patient patient;
   @ManyToOne
   @JoinColumn(name = "doctor_id")
   private Doctor doctor;
+  @Enumerated(EnumType.STRING)
+  private AppointmentStatus status;
 }

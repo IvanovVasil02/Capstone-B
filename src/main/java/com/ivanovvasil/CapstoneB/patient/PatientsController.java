@@ -1,11 +1,10 @@
 package com.ivanovvasil.CapstoneB.patient;
 
-import com.ivanovvasil.CapstoneB.appointment.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
+import com.ivanovvasil.CapstoneB.doctor.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ public class PatientsController {
   public PatientResponseDTO getProfile(@AuthenticationPrincipal Patient currentPatient) {
     return ps.convertPatientResponse(currentPatient);
   }
-  
+
   @GetMapping("/search")
   public Page<PatientResponseDTO> SearchMedicineByActiveIngredient(@RequestParam String q,
                                                                    @RequestParam String by,
@@ -40,27 +39,32 @@ public class PatientsController {
 
   @GetMapping("/prescriptions")
   @ResponseStatus(HttpStatus.OK)
-  public Page<PrescriptionDTO> getPrescriptions(@AuthenticationPrincipal Patient currentPatient,
-                                                @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "30") int size,
-                                                @RequestParam(defaultValue = "id") String orderBy) {
+  public PageDTO getPrescriptions(@AuthenticationPrincipal Patient currentPatient,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "30") int size,
+                                  @RequestParam(defaultValue = "id") String orderBy) {
     return prs.getPatientsPrescriptions(currentPatient, page, size, orderBy);
   }
 
   @GetMapping("/appointments")
   @ResponseStatus(HttpStatus.OK)
-  public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Patient currentPatient,
-                                              @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "30") int size,
-                                              @RequestParam(defaultValue = "id") String orderBy) {
+  public PageDTO getAppointments(@AuthenticationPrincipal Patient currentPatient,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "30") int size,
+                                 @RequestParam(defaultValue = "id") String orderBy) {
     return aps.getPatientsAppointment(currentPatient, page, size, orderBy);
   }
 
   @PostMapping("/takePrescription")
   @ResponseStatus(HttpStatus.CREATED)
   public void prescriptionRequest(@AuthenticationPrincipal Patient currentUser, @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
-    System.out.println(patientPrescriptionDTO.toString());
     prs.formatPrescription(currentUser, patientPrescriptionDTO);
+  }
+
+  @PostMapping("/askAppointment")
+  @ResponseStatus(HttpStatus.OK)
+  public void askAppointment(@AuthenticationPrincipal Patient patient) {
+    aps.askAppointment(patient);
   }
 
 }

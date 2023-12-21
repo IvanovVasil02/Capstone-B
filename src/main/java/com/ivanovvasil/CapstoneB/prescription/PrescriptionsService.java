@@ -3,6 +3,7 @@ package com.ivanovvasil.CapstoneB.prescription;
 import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
+import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
 import com.ivanovvasil.CapstoneB.doctor.PageDTO;
@@ -44,6 +45,8 @@ public class PrescriptionsService {
   DoctorsService ds;
   @Autowired
   PrescriptionDetailsRepo prsd;
+  @Autowired
+  AppointmentsService aps;
 
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
@@ -100,7 +103,7 @@ public class PrescriptionsService {
 
 
   public List<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor) {
-    List<Prescription> prescriptionList = pr.getPrescriptionsToApprove(doctor.getId());
+    List<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId());
     return prescriptionList.stream().map(this::convertToPrescriptionDTO).collect(Collectors.toList());
   }
 
@@ -112,17 +115,17 @@ public class PrescriptionsService {
   public PageDTO getDoctorPrescriptions(Doctor doctor, int page, int size, String order) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(order));
     Page<Prescription> prescriptionPage = pr.findByDoctorId(doctor.getId(), pageable);
-    long totalPending = pr.getPrescriptionsToApprove(doctor.getId()).size();
+    long totalPending = pr.getPrescriptionsToApproveDoc(doctor.getId()).size();
     Page<PrescriptionDTO> prescriptionDTOS = prescriptionPage.map(this::convertToPrescriptionDTO);
     return new PageDTO(prescriptionDTOS, totalPending);
   }
 
-  public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
-    return PrescriptionDetailsDTO.builder()
-            .id(prescriptionDetails.getId())
-            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
-            .quantity(prescriptionDetails.getQuantity())
-            .build();
+  public PageDTO getPatientsPrescriptions(Patient currentPatient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Prescription> prescriptionPage = pr.findAllByPatientId(currentPatient.getId(), pageable);
+    long totalPending = pr.getPrescriptionsToApprovePat(currentPatient.getId()).size();
+    Page<PrescriptionDTO> prescriptionDTOS = prescriptionPage.map(this::convertToPrescriptionDTO);
+    return new PageDTO(prescriptionDTOS, totalPending);
   }
 
   public PrescriptionDTO convertToPrescriptionDTO(Prescription prescription) {
@@ -140,16 +143,12 @@ public class PrescriptionsService {
             .build();
   }
 
-  public Page<PrescriptionDTO> getPatientsPrescriptions(Patient currentPatient, int page, int size, String orderBy) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Prescription> prescriptionPage = pr.findAllByPatientId(currentPatient.getId(), pageable);
-    return prescriptionPage.map(this::convertToPrescriptionDTO);
+  public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
+    return PrescriptionDetailsDTO.builder()
+            .id(prescriptionDetails.getId())
+            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
+            .quantity(prescriptionDetails.getQuantity())
+            .build();
   }
-
-  public List<PrescriptionDTO> getPatientsPrescriptions(Patient currentPatient) {
-    List<Prescription> prescriptionList = pr.findAllByPatientId(currentPatient.getId());
-    return prescriptionList.stream().map(this::convertToPrescriptionDTO).toList();
-  }
-
 
 }

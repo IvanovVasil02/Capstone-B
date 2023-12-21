@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.appointment;
+package com.ivanovvasil.CapstoneB.appointment.payloads;
 
 import com.ivanovvasil.CapstoneB.doctor.DoctorDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;

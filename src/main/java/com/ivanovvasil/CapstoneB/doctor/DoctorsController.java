@@ -1,7 +1,7 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
-import com.ivanovvasil.CapstoneB.appointment.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
+import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;
@@ -9,7 +9,6 @@ import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -49,11 +48,11 @@ public class DoctorsController {
 
   @GetMapping("/appointments")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Doctor doctor,
-                                              @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "30") int size,
-                                              @RequestParam(defaultValue = "id") String orderBy) {
-    return as.getDoctorAppointments(doctor, page, size, orderBy);
+  public PageDTO getAppointments(@AuthenticationPrincipal Doctor doctor,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "30") int size,
+                                 @RequestParam(defaultValue = "id") String orderBy) {
+    return as.getDoctorsAppointments(doctor, page, size, orderBy);
   }
 
   @GetMapping("/prescriptions")
@@ -75,5 +74,11 @@ public class DoctorsController {
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Prescription ApprovePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId, DoctorPrescriptionDTO body) {
     return prs.save(doctor.getId(), prescriptionId, body);
+  }
+
+  @PostMapping("/fixAppointment")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  public void fixAppointment(FixAppointmentDTO appointmentDTO) {
+    as.fixAppointment(appointmentDTO);
   }
 }
