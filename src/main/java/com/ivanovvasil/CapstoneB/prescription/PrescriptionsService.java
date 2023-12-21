@@ -5,6 +5,7 @@ import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
+import com.ivanovvasil.CapstoneB.doctor.PageDTO;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
@@ -108,10 +109,12 @@ public class PrescriptionsService {
   }
 
 
-  public Page<PrescriptionDTO> getDoctorPrescriptions(Doctor doctor, int page, int size, String order) {
+  public PageDTO getDoctorPrescriptions(Doctor doctor, int page, int size, String order) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(order));
     Page<Prescription> prescriptionPage = pr.findByDoctorId(doctor.getId(), pageable);
-    return prescriptionPage.map(this::convertToPrescriptionDTO);
+    long totalPending = pr.getPrescriptionsToApprove(doctor.getId()).size();
+    Page<PrescriptionDTO> prescriptionDTOS = prescriptionPage.map(this::convertToPrescriptionDTO);
+    return new PageDTO(prescriptionDTOS, totalPending);
   }
 
   public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {

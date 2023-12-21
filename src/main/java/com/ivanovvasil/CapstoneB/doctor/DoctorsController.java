@@ -58,11 +58,10 @@ public class DoctorsController {
 
   @GetMapping("/prescriptions")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public Page<PrescriptionDTO> getPrescriptions(@AuthenticationPrincipal Doctor doctor,
-                                                @RequestParam(defaultValue = "0") int page,
-                                                @RequestParam String ric,
-                                                @RequestParam(defaultValue = "30") int size,
-                                                @RequestParam(defaultValue = "id") String orderBy) {
+  public PageDTO getPrescriptions(@AuthenticationPrincipal Doctor doctor,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size,
+                                  @RequestParam(defaultValue = "id") String orderBy) {
     return prs.getDoctorPrescriptions(doctor, page, size, orderBy);
   }
 
