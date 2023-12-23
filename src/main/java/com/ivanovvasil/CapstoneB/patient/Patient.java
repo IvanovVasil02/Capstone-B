@@ -34,27 +34,27 @@ public class Patient extends User {
   private List<Prescription> prescriptionSet;
 
   public Patient(String name, String surname, LocalDate birthDate, String sex, String address,
-      Municipality municipality, String email, String password, String phoneNumber, UserRole role, Doctor doctor) {
+                 Municipality municipality, String email, String password, String phoneNumber, UserRole role, Doctor doctor) {
     super(name, surname, birthDate, sex, address, municipality, email, password, phoneNumber, role);
     this.doctor = doctor;
   }
 
-  @Override
-  public String toString() {
-    return "Patient{" +
-        "doctor=" + doctor.getName() +
-        ", healthCompanyCode='" + healthCompanyCode + '\'' +
-        ", name='" + name + '\'' +
-        ", surname='" + surname + '\'' +
-        ", birthDate=" + birthDate +
-        ", sex='" + sex + '\'' +
-        ", fiscalCode='" + fiscalCode + '\'' +
-        ", address='" + address + '\'' +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        ", phoneNumber='" + phoneNumber + '\'' +
-        ", municipality='" + municipality + '\'' +
-        ", role=" + role +
-        "} " + super.toString();
-  }
+//  @Override
+//  public String toString() {
+//    return "Patient{" +
+//            "doctor=" + doctor.getName() +
+//            ", healthCompanyCode='" + healthCompanyCode + '\'' +
+//            ", name='" + name + '\'' +
+//            ", surname='" + surname + '\'' +
+//            ", birthDate=" + birthDate +
+//            ", sex='" + sex + '\'' +
+//            ", fiscalCode='" + fiscalCode + '\'' +
+//            ", address='" + address + '\'' +
+//            ", email='" + email + '\'' +
+//            ", password='" + password + '\'' +
+//            ", phoneNumber='" + phoneNumber + '\'' +
+//            ", municipality='" + municipality.getMunicipality() + '\'' +
+//            ", role=" + role +
+//            "} " + super.toString();
+//  }
 }

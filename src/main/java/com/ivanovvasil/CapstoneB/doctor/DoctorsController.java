@@ -9,6 +9,7 @@ import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,11 @@ public class DoctorsController {
 
   @GetMapping("/patients")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public List<PatientResponseDTO> getDoctorPatientsList(@AuthenticationPrincipal Doctor body) {
-    return ps.getPatientsList(body);
+  public Page<PatientResponseDTO> getDoctorPatientsList(@AuthenticationPrincipal Doctor doctor,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "30") int size,
+                                                        @RequestParam(defaultValue = "id") String orderBy) {
+    return ps.getPatientsList(doctor, page, size, orderBy);
   }
 
   @GetMapping("/me")

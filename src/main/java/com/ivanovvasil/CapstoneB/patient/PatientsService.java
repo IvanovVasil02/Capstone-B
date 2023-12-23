@@ -38,9 +38,10 @@ public class PatientsService {
     return pr.findAll(pageable);
   }
 
-  public List<PatientResponseDTO> getPatientsList(Doctor doctor) {
-    List<Patient> patientList = pr.findByDoctor(doctor);
-    return patientList.stream().map(this::convertPatientResponse).toList();
+  public Page<PatientResponseDTO> getPatientsList(Doctor doctor, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Patient> patients = pr.findByDoctorId(doctor.getId(), pageable);
+    return patients.map(this::convertPatientResponse);
   }
 
   public List<Patient> getAllPatients() {
@@ -81,7 +82,7 @@ public class PatientsService {
             .address(patient.getAddress())
             .fiscalCode(patient.getFiscalCode())
             .phoneNumber(patient.getPhoneNumber())
-            .municipality(patient.getMunicipality().getMunicipality())
+            .municipality(patient.getMunicipality().getPostalCode())
             .email(patient.getEmail())
             .doctor(ds.convertToDoctorProfileDTO(patient.getDoctor()))
             .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())
