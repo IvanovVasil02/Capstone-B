@@ -44,12 +44,10 @@ public class PrescriptionsService {
   @Autowired
   PrescriptionDetailsRepo prsd;
 
-
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
     if (prescription.getDoctor().getId().equals(doctorId)) {
       prescription.setIssuingDate(LocalDate.now());
-      prescription.setNote(body.note());
       prescription.setLocalHealthCode(prescription.getPatient().getHealthCompanyCode());
       if (body.priority() != null) {
         prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
@@ -77,14 +75,14 @@ public class PrescriptionsService {
     int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
 
     Prescription prescription = Prescription.builder()
-            .status(PrescriptionStatus.IN_ATTESA)
-            .patient(patient)
-            .prescription(patientPrescriptionDTO.prescription())
-            .packagesNumber(packagingCount)
-            .region(patient.getMunicipality().getRegion())
-            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
-            .doctor(patient.getDoctor())
-            .build();
+        .status(PrescriptionStatus.IN_ATTESA)
+        .patient(patient)
+        .prescription(patientPrescriptionDTO.prescription())
+        .packagesNumber(packagingCount)
+        .region(patient.getMunicipality().getRegion())
+        .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
+        .doctor(patient.getDoctor())
+        .build();
     this.save(prescription);
 
     for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
@@ -98,7 +96,7 @@ public class PrescriptionsService {
   public Prescription findById(UUID id) {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
-  
+
   public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId(), pageable);
@@ -108,7 +106,6 @@ public class PrescriptionsService {
   public void delete(UUID id) {
     pr.deleteById(id);
   }
-
 
   public PageDTO getDoctorPrescriptions(Doctor doctor, int page, int size, String order) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(order));
@@ -128,26 +125,26 @@ public class PrescriptionsService {
 
   public PrescriptionDTO convertToPrescriptionDTO(Prescription prescription) {
     Set<PrescriptionDetailsDTO> prescriptionDetailsDTOList = prescription.getPrescription()
-            .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
+        .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
     return PrescriptionDTO.builder()
-            .prescriptionID(prescription.getId())
-            .patient(ps.convertPatientResponse(prescription.getPatient()))
-            .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
-            .prescription(prescriptionDetailsDTOList)
-            .packagesNumber(prescription.getPackagesNumber())
-            .region(prescription.getRegion())
-            .provinceAbbr(prescription.getProvinceAbbr())
-            .localHealthCode(prescription.getLocalHealthCode())
-            .status(prescription.getStatus())
-            .build();
+        .prescriptionID(prescription.getId())
+        .patient(ps.convertPatientResponse(prescription.getPatient()))
+        .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
+        .prescription(prescriptionDetailsDTOList)
+        .packagesNumber(prescription.getPackagesNumber())
+        .region(prescription.getRegion())
+        .provinceAbbr(prescription.getProvinceAbbr())
+        .localHealthCode(prescription.getLocalHealthCode())
+        .status(prescription.getStatus())
+        .build();
   }
 
   public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
     return PrescriptionDetailsDTO.builder()
-            .id(prescriptionDetails.getId())
-            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
-            .quantity(prescriptionDetails.getQuantity())
-            .build();
+        .id(prescriptionDetails.getId())
+        .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
+        .quantity(prescriptionDetails.getQuantity())
+        .build();
   }
 
 }

@@ -34,7 +34,6 @@ public class Prescription {
   private Set<PrescriptionDetails> prescription = new HashSet<>();
   private int packagesNumber;
   private LocalDate issuingDate;
-  private String note;
   private String region;
   private String provinceAbbr;
   private String localHealthCode;
