@@ -21,6 +21,7 @@ public record PrescriptionDTO(
         LocalDate isssuingDate,
         String note,
         String region,
+        String provinceAbbr,
         String localHealthCode,
         String diagnosticQuestion,
         TypeRecipe typeRecipe,

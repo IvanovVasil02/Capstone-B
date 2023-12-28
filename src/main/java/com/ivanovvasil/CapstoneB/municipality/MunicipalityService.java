@@ -48,6 +48,7 @@ public class MunicipalityService {
       municipality.setPostalCode(line[4]);
       municipality.setRegion(line[9]);
       municipality.setProvince(line[6]);
+      municipality.setProvinceAbbr(line[5]);
       municipality.setIstat(line[0]);
       return municipality;
     } catch (Exception e) {

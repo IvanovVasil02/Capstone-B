@@ -51,6 +51,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .doctor(currentPatient.getDoctor())
                 .packagesNumber(new Random().nextInt(1, 6))
                 .region(currentPatient.getDoctor().getMunicipality().getRegion())
+                .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .localHealthCode(currentPatient.getHealthCompanyCode())
                 .status(PrescriptionStatus.APPROVATA)
                 .issuingDate(getRandomLocalDate())

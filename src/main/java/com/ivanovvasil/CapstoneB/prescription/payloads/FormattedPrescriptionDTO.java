@@ -12,6 +12,7 @@ public record FormattedPrescriptionDTO(PatientResponseDTO patient,
                                        Set<PrescriptionDetails> prescription,
                                        int packagesNumber,
                                        String region,
+                                       String provinceAbbr,
                                        String localHealthCode,
                                        Doctor doctor
 ) {

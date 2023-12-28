@@ -36,6 +36,7 @@ public class Prescription {
   private LocalDate issuingDate;
   private String note;
   private String region;
+  private String provinceAbbr;
   private String localHealthCode;
   private String diagnosticQuestion;
   @Enumerated(EnumType.STRING)
