@@ -22,6 +22,7 @@ public class Municipality {
   private UUID id;
   private String region;
   private String province;
+  private String provinceAbbr;
   private String municipality;
   private String postalCode;
   private String istat;

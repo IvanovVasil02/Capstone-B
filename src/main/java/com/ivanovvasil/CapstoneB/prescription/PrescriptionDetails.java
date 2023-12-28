@@ -24,5 +24,5 @@ public class PrescriptionDetails {
   @JoinColumn(name = "prescription_id")
   private Prescription prescription;
   private int quantity;
-
+  private String note;
 }

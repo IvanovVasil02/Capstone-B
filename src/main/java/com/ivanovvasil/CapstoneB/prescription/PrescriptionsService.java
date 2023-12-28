@@ -49,7 +49,6 @@ public class PrescriptionsService {
     Prescription prescription = this.findById(prescriptionId);
     if (prescription.getDoctor().getId().equals(doctorId)) {
       prescription.setIssuingDate(LocalDate.now());
-      prescription.setNote(body.note());
       prescription.setLocalHealthCode(prescription.getPatient().getHealthCompanyCode());
       if (body.priority() != null) {
         prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
@@ -82,6 +81,7 @@ public class PrescriptionsService {
             .prescription(patientPrescriptionDTO.prescription())
             .packagesNumber(packagingCount)
             .region(patient.getMunicipality().getRegion())
+            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
             .doctor(patient.getDoctor())
             .build();
     this.save(prescription);
@@ -97,7 +97,6 @@ public class PrescriptionsService {
   public Prescription findById(UUID id) {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
-
 
   public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
@@ -136,6 +135,7 @@ public class PrescriptionsService {
             .prescription(prescriptionDetailsDTOList)
             .packagesNumber(prescription.getPackagesNumber())
             .region(prescription.getRegion())
+            .provinceAbbr(prescription.getProvinceAbbr())
             .localHealthCode(prescription.getLocalHealthCode())
             .status(prescription.getStatus())
             .build();

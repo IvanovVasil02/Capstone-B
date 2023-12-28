@@ -9,5 +9,6 @@ import java.util.UUID;
 public record PrescriptionDetailsDTO(
         UUID id,
         MedicineDTO medicine,
-        int quantity) {
+        int quantity,
+        String note) {
 }
