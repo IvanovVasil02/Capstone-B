@@ -1,7 +1,8 @@
 package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
-import com.ivanovvasil.CapstoneB.doctor.PageDTO;
+import com.ivanovvasil.CapstoneB.doctor.Doctor;
+import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
@@ -29,12 +30,13 @@ public class PatientsController {
   }
 
   @GetMapping("/search")
-  public Page<PatientResponseDTO> SearchMedicineByActiveIngredient(@RequestParam String q,
+  public Page<PatientResponseDTO> SearchMedicineByActiveIngredient(@AuthenticationPrincipal Doctor doctor,
+                                                                   @RequestParam String q,
                                                                    @RequestParam String by,
                                                                    @RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "30") int size,
                                                                    @RequestParam(defaultValue = "id") String orderBy) {
-    return ps.searchPatients(q, by, page, size, orderBy);
+    return ps.searchPatients(q, doctor, by, page, size, orderBy);
   }
 
   @GetMapping("/prescriptions")

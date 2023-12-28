@@ -1,6 +1,6 @@
 package com.ivanovvasil.CapstoneB.prescription.payloads;
 
-import com.ivanovvasil.CapstoneB.doctor.DoctorDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;

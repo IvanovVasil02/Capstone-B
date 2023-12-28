@@ -1,6 +1,6 @@
 package com.ivanovvasil.CapstoneB.patient.payloads;
 
-import com.ivanovvasil.CapstoneB.doctor.DoctorProfileDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
 import com.ivanovvasil.CapstoneB.user.UserRole;
 import lombok.Builder;
 

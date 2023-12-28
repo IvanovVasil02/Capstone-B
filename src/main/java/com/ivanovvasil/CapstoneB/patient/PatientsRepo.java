@@ -13,10 +13,9 @@ import java.util.UUID;
 public interface PatientsRepo extends JpaRepository<Patient, UUID> {
   Optional<Patient> findByEmailIgnoreCase(String email);
 
-  Page<Patient> findByFiscalCodeStartingWithIgnoreCase(String q, Pageable pageable);
-
-  Page<Patient> findByNameStartingWithIgnoreCase(String q, Pageable pageable);
-
   Page<Patient> findByDoctorId(UUID id, Pageable pageable);
 
+  Page<Patient> findByFiscalCodeStartingWithIgnoreCaseAndDoctorId(String q, UUID doctor, Pageable pageable);
+
+  Page<Patient> findByNameStartingWithIgnoreCaseAndDoctorId(String q, UUID doctor, Pageable pageable);
 }

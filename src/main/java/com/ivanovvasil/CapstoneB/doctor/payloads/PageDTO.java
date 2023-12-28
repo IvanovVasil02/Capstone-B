@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.doctor;
+package com.ivanovvasil.CapstoneB.doctor.payloads;
 
 import org.springframework.data.domain.Page;
 

@@ -2,6 +2,9 @@ package com.ivanovvasil.CapstoneB.doctor;
 
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.Prescription;
@@ -70,8 +73,11 @@ public class DoctorsController {
 
   @GetMapping("/prescriptionsToApp")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public List<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor) {
-    return prs.getPrescriptionsToApprove(doctor);
+  public Page<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size,
+                                                         @RequestParam(defaultValue = "id") String orderBy) {
+    return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
   @PutMapping("/prescriptions/{prescriptionId}")

@@ -3,10 +3,9 @@ package com.ivanovvasil.CapstoneB.prescription;
 import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
-import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
-import com.ivanovvasil.CapstoneB.doctor.PageDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,8 +43,7 @@ public class PrescriptionsService {
   DoctorsService ds;
   @Autowired
   PrescriptionDetailsRepo prsd;
-  @Autowired
-  AppointmentsService aps;
+
 
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
@@ -102,9 +99,10 @@ public class PrescriptionsService {
   }
 
 
-  public List<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor) {
-    List<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId());
-    return prescriptionList.stream().map(this::convertToPrescriptionDTO).collect(Collectors.toList());
+  public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId(), pageable);
+    return prescriptionList.map(this::convertToPrescriptionDTO);
   }
 
   public void delete(UUID id) {

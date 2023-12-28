@@ -2,7 +2,6 @@ package com.ivanovvasil.CapstoneB.appointment;
 
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.patient.Patient;
-import com.ivanovvasil.CapstoneB.prescription.Prescription;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,8 +18,10 @@ public interface AppointmentRepo extends JpaRepository<Appointment, UUID> {
 
   Page<Appointment> findByPatient(Patient patient, Pageable pageable);
 
-  Page<Appointment> findByDoctorId(UUID id, Pageable pageable);
 
   @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :id and a.status = 'PENDING'")
-  List<Prescription> getAppointmentsToApprove(@Param("id") UUID id);
+  List<Appointment> getAppointmentsToApproveDoc(@Param("id") UUID id);
+
+  @Query("SELECT a FROM Appointment a WHERE a.patient.id = :id and a.status = 'PENDING'")
+  List<Appointment> getAppointmentsToApprovePat(@Param("id") UUID id);
 }

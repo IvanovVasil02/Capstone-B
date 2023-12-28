@@ -1,5 +1,8 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorUpdateDTO;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.ivanovvasil.CapstoneB.doctor;
+package com.ivanovvasil.CapstoneB.doctor.payloads;
 
 import com.ivanovvasil.CapstoneB.user.UserRole;
 import lombok.Builder;

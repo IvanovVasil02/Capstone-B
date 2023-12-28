@@ -4,7 +4,7 @@ import com.ivanovvasil.CapstoneB.appointment.payloads.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
-import com.ivanovvasil.CapstoneB.doctor.PageDTO;
+import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
@@ -46,13 +46,12 @@ public class AppointmentsService {
     appointment.setDate(appointmentDTO.date());
     appointment.setTime(appointmentDTO.time());
     ar.save(appointment);
-
   }
 
   public PageDTO getDoctorsAppointments(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Appointment> appointmentPage = ar.findByDoctor(doctor, pageable);
-    long totalPending = ar.getAppointmentsToApprove(doctor.getId()).size();
+    long totalPending = ar.getAppointmentsToApproveDoc(doctor.getId()).size();
     Page<AppointmentDTO> appointmentsPageDTO = appointmentPage.map(this::convertAppointmentToDTO);
 
     return new PageDTO(appointmentsPageDTO, totalPending);
@@ -61,7 +60,7 @@ public class AppointmentsService {
   public PageDTO getPatientsAppointment(Patient currentPatient, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Appointment> appointmentPage = ar.findByPatient(currentPatient, pageable);
-    long totalPending = ar.getAppointmentsToApprove(currentPatient.getId()).size();
+    long totalPending = ar.getAppointmentsToApprovePat(currentPatient.getId()).size();
     Page<AppointmentDTO> appointmentsPageDTO = appointmentPage.map(this::convertAppointmentToDTO);
     return new PageDTO(appointmentsPageDTO, totalPending);
   }
