@@ -47,7 +47,7 @@ public class UserAuhtenticationService {
     }
   }
 
-  public Patient registerPatient(PatientDTO body) {
+  public void registerPatient(PatientDTO body) {
     ur.findByEmail(body.email()).ifPresent(patient -> {
       throw new BadRequestException("The email " + patient.getEmail() + " is alredy used.");
     });
@@ -57,7 +57,7 @@ public class UserAuhtenticationService {
             body.sex(), body.address(), municipality, body.email(),
             bcrypt.encode(body.password()), body.phoneNumber(),
             UserRole.PATIENT, doctor);
-    return ps.save(patient);
+    ps.save(patient);
   }
 
 }

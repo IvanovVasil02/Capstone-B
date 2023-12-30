@@ -75,14 +75,16 @@ public class PrescriptionsService {
     int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
 
     Prescription prescription = Prescription.builder()
-        .status(PrescriptionStatus.IN_ATTESA)
-        .patient(patient)
-        .prescription(patientPrescriptionDTO.prescription())
-        .packagesNumber(packagingCount)
-        .region(patient.getMunicipality().getRegion())
-        .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
-        .doctor(patient.getDoctor())
-        .build();
+            .status(PrescriptionStatus.IN_ATTESA)
+            .patient(patient)
+            .prescription(patientPrescriptionDTO.prescription())
+            .packagesNumber(packagingCount)
+            .region(patient.getMunicipality().getRegion())
+            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .issuingDate(LocalDate.now())
+            .doctor(patient.getDoctor())
+            .build();
     this.save(prescription);
 
     for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
@@ -125,26 +127,26 @@ public class PrescriptionsService {
 
   public PrescriptionDTO convertToPrescriptionDTO(Prescription prescription) {
     Set<PrescriptionDetailsDTO> prescriptionDetailsDTOList = prescription.getPrescription()
-        .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
+            .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
     return PrescriptionDTO.builder()
-        .prescriptionID(prescription.getId())
-        .patient(ps.convertPatientResponse(prescription.getPatient()))
-        .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
-        .prescription(prescriptionDetailsDTOList)
-        .packagesNumber(prescription.getPackagesNumber())
-        .region(prescription.getRegion())
-        .provinceAbbr(prescription.getProvinceAbbr())
-        .localHealthCode(prescription.getLocalHealthCode())
-        .status(prescription.getStatus())
-        .build();
+            .prescriptionID(prescription.getId())
+            .patient(ps.convertPatientResponse(prescription.getPatient()))
+            .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
+            .prescription(prescriptionDetailsDTOList)
+            .packagesNumber(prescription.getPackagesNumber())
+            .region(prescription.getRegion())
+            .provinceAbbr(prescription.getProvinceAbbr())
+            .localHealthCode(prescription.getLocalHealthCode())
+            .status(prescription.getStatus())
+            .build();
   }
 
   public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
     return PrescriptionDetailsDTO.builder()
-        .id(prescriptionDetails.getId())
-        .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
-        .quantity(prescriptionDetails.getQuantity())
-        .build();
+            .id(prescriptionDetails.getId())
+            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
+            .quantity(prescriptionDetails.getQuantity())
+            .build();
   }
 
 }

@@ -82,6 +82,7 @@ public class PatientsService {
             .address(patient.getAddress())
             .fiscalCode(patient.getFiscalCode())
             .phoneNumber(patient.getPhoneNumber())
+            .municipalityDenomination(patient.getMunicipality().getMunicipality())
             .municipality(patient.getMunicipality().getPostalCode())
             .email(patient.getEmail())
             .doctor(ds.convertToDoctorProfileDTO(patient.getDoctor()))

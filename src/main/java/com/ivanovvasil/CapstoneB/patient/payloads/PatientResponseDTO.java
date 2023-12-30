@@ -15,6 +15,7 @@ public record PatientResponseDTO(
         String sex,
         String fiscalCode,
         String address,
+        String municipalityDenomination,
         String municipality,
         String email,
         String phoneNumber,
