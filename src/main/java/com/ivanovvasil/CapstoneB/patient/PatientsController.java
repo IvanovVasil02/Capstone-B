@@ -6,9 +6,11 @@ import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +48,15 @@ public class PatientsController {
                                   @RequestParam(defaultValue = "30") int size,
                                   @RequestParam(defaultValue = "id") String orderBy) {
     return prs.getPatientsPrescriptions(currentPatient, page, size, orderBy);
+  }
+
+  @GetMapping("/prescriptionsToApp")
+  @PreAuthorize("hasAuthority('PATIENT')")
+  public Page<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Patient patient,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size,
+                                                         @RequestParam(defaultValue = "id") String orderBy) {
+    return prs.getPatientPrescriptionsToApprove(patient, page, size, orderBy);
   }
 
   @GetMapping("/appointments")

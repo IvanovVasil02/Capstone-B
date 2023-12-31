@@ -29,7 +29,7 @@ public class DoctorsRunner implements ApplicationRunner {
   MunicipalityService ms;
   @Autowired
   PasswordEncoder bcrypt;
-  private boolean executed = false;
+  private boolean executed = true;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {

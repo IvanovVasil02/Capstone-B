@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -44,20 +45,35 @@ public class PrescriptionsService {
   @Autowired
   PrescriptionDetailsRepo prsd;
 
+  public void save(Prescription prescription) {
+    pr.save(prescription);
+  }
+
+
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
+
+
     if (prescription.getDoctor().getId().equals(doctorId)) {
       prescription.setIssuingDate(LocalDate.now());
-      prescription.setLocalHealthCode(prescription.getPatient().getHealthCompanyCode());
-      if (body.priority() != null) {
+      if (!body.priority().isEmpty()) {
         prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
       }
-      if (body.typeRecipe() != null) {
+      if (!body.typeRecipe().isEmpty()) {
         prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
       }
-      if (!prescription.getPrescription().isEmpty()) {
-        prescription.setPrescription(prescription.getPrescription());
+      if (!body.prescription().isEmpty()) {
+        Set<PrescriptionDetails> prescriptionDetailsSet = body.prescription();
+        List<PrescriptionDetails> oldPrescriptionDetails = prsd.findAllByPrescriptionId(prescription.getId());
+        oldPrescriptionDetails.forEach((item) -> prsd.deleteById(item.getId()));
+        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+          Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
+          prescriptionDetails.setMedicine(medicine);
+          prescriptionDetails.setPrescription(prescription);
+          prsd.save(prescriptionDetails);
+        }
       }
+      prescription.setStatus(PrescriptionStatus.APPROVED);
       return pr.save(prescription);
     } else {
       throw new UnauthorizedException("Permissions denied for this recipe");
@@ -65,9 +81,6 @@ public class PrescriptionsService {
 
   }
 
-  public void save(Prescription prescription) {
-    pr.save(prescription);
-  }
 
   public void formatPrescription(Patient patient, PatientPrescriptionDTO patientPrescriptionDTO) {
 
@@ -75,7 +88,7 @@ public class PrescriptionsService {
     int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
 
     Prescription prescription = Prescription.builder()
-            .status(PrescriptionStatus.IN_ATTESA)
+            .status(PrescriptionStatus.PENDING)
             .patient(patient)
             .prescription(patientPrescriptionDTO.prescription())
             .packagesNumber(packagingCount)
@@ -99,9 +112,15 @@ public class PrescriptionsService {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
-  public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
+  public Page<PrescriptionDTO> getDoctorPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId(), pageable);
+    return prescriptionList.map(this::convertToPrescriptionDTO);
+  }
+
+  public Page<PrescriptionDTO> getPatientPrescriptionsToApprove(Patient patient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Prescription> prescriptionList = pr.getPrescriptionsToApprovePat(patient.getId(), pageable);
     return prescriptionList.map(this::convertToPrescriptionDTO);
   }
 
@@ -137,6 +156,7 @@ public class PrescriptionsService {
             .region(prescription.getRegion())
             .provinceAbbr(prescription.getProvinceAbbr())
             .localHealthCode(prescription.getLocalHealthCode())
+            .isssuingDate(prescription.getIssuingDate())
             .status(prescription.getStatus())
             .build();
   }

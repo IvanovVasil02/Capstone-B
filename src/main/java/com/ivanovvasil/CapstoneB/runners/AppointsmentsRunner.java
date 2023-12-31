@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.runners;
 
 import com.ivanovvasil.CapstoneB.appointment.Appointment;
+import com.ivanovvasil.CapstoneB.appointment.AppointmentStatus;
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
@@ -28,7 +29,7 @@ public class AppointsmentsRunner implements ApplicationRunner {
   @Autowired
   AppointmentsService as;
 
-  private Boolean executed = false;
+  private Boolean executed = true;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -44,10 +45,20 @@ public class AppointsmentsRunner implements ApplicationRunner {
         Appointment appointment = Appointment.builder()
                 .date(getRandomLocalCurentDate())
                 .time(generateRandomLocalTime())
+                .status(AppointmentStatus.ACCEPTED)
                 .doctor(doctor)
                 .patient(patient)
                 .build();
         as.save(appointment);
+
+        Appointment appointment1 = Appointment.builder()
+                .date(getRandomLocalCurentDate())
+                .time(generateRandomLocalTime())
+                .status(AppointmentStatus.PENDING)
+                .doctor(doctor)
+                .patient(patient)
+                .build();
+        as.save(appointment1);
       }
 
       executed = true;

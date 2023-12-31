@@ -7,12 +7,12 @@ import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
-import com.ivanovvasil.CapstoneB.prescription.Prescription;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -77,18 +77,19 @@ public class DoctorsController {
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "20") int size,
                                                          @RequestParam(defaultValue = "id") String orderBy) {
-    return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
+    return prs.getDoctorPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
   @PutMapping("/prescriptions/{prescriptionId}")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public Prescription ApprovePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId, DoctorPrescriptionDTO body) {
-    return prs.save(doctor.getId(), prescriptionId, body);
+  @ResponseStatus(HttpStatus.OK)
+  public void ApprovePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId, @RequestBody DoctorPrescriptionDTO body) {
+    prs.save(doctor.getId(), prescriptionId, body);
   }
 
-  @PostMapping("/fixAppointment")
+  @PutMapping("/fixAppointment")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public void fixAppointment(FixAppointmentDTO appointmentDTO) {
+  public void fixAppointment(@RequestBody FixAppointmentDTO appointmentDTO) {
     as.fixAppointment(appointmentDTO);
   }
 }
