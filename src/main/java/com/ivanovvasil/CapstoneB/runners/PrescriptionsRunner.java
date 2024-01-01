@@ -53,6 +53,40 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .region(currentPatient.getDoctor().getMunicipality().getRegion())
                 .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .localHealthCode(currentPatient.getHealthCompanyCode())
+                .status(PrescriptionStatus.APPROVED)
+                .issuingDate(getRandomLocalDate())
+                .build();
+
+        for (int j = 0; j < new Random().nextInt(1, 3); j++) {
+          Medicine medicine = medicineList.get(new Random().nextInt(medicineList.size()));
+
+          PrescriptionDetails prescriptionDetails = PrescriptionDetails.builder()
+                  .medicine(medicine)
+                  .quantity(new Random().nextInt(1, 2))
+                  .prescription(prescription)
+                  .build();
+          prescriptionDetailsSet.add(prescriptionDetails);
+        }
+
+        prescription.setPrescription(prescriptionDetailsSet);
+        prs.save(prescription);
+
+        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+          prescriptionDetails.setPrescription(prescription);
+          prsd.save(prescriptionDetails);
+        }
+      }
+      for (int i = 0; i < 200; i++) {
+        Patient currentPatient = patientList.get(new Random().nextInt(0, patientList.size()));
+        Set<PrescriptionDetails> prescriptionDetailsSet = new HashSet<>();
+
+        Prescription prescription = Prescription.builder()
+                .patient(currentPatient)
+                .doctor(currentPatient.getDoctor())
+                .packagesNumber(new Random().nextInt(1, 6))
+                .region(currentPatient.getDoctor().getMunicipality().getRegion())
+                .localHealthCode(currentPatient.getHealthCompanyCode())
+                .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .status(PrescriptionStatus.PENDING)
                 .issuingDate(getRandomLocalDate())
                 .build();

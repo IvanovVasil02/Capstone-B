@@ -84,6 +84,7 @@ public class PatientsService {
             .phoneNumber(patient.getPhoneNumber())
             .municipalityDenomination(patient.getMunicipality().getMunicipality())
             .municipality(patient.getMunicipality().getPostalCode())
+            .municipalityDenomination(patient.getMunicipality().getMunicipality())
             .email(patient.getEmail())
             .doctor(ds.convertToDoctorProfileDTO(patient.getDoctor()))
             .exemptions(patient.getExemptions().stream().map(Exemption::getExemptionCode).toList())
