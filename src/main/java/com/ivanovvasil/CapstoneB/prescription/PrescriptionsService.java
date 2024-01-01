@@ -49,10 +49,8 @@ public class PrescriptionsService {
     pr.save(prescription);
   }
 
-
   public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
     Prescription prescription = this.findById(prescriptionId);
-
 
     if (prescription.getDoctor().getId().equals(doctorId)) {
       prescription.setIssuingDate(LocalDate.now());
@@ -80,7 +78,6 @@ public class PrescriptionsService {
     }
 
   }
-
 
   public void formatPrescription(Patient patient, PatientPrescriptionDTO patientPrescriptionDTO) {
 
@@ -112,7 +109,13 @@ public class PrescriptionsService {
     return pr.findById(id).orElseThrow(() -> new NotFoundException(id));
   }
 
-  public Page<PrescriptionDTO> getDoctorPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
+  public Page<PrescriptionDTO> getPrescriptionsToApprove(Patient patient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Prescription> prescriptionList = pr.getPrescriptionsToApprovePat(patient.getId(), pageable);
+    return prescriptionList.map(this::convertToPrescriptionDTO);
+  }
+
+  public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
     Page<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId(), pageable);
     return prescriptionList.map(this::convertToPrescriptionDTO);

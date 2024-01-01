@@ -4,7 +4,6 @@ import com.ivanovvasil.CapstoneB.appointment.payloads.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.DoctorsService;
-import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.exceptions.NotFoundException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 public class AppointmentsService {
@@ -36,7 +33,6 @@ public class AppointmentsService {
     Appointment appointment = Appointment.builder()
             .patient(patient)
             .doctor(patient.getDoctor())
-            .timeRequest(LocalDateTime.now())
             .status(AppointmentStatus.PENDING).build();
     ar.save(appointment);
   }
@@ -45,24 +41,32 @@ public class AppointmentsService {
     Appointment appointment = ar.findById(appointmentDTO.id()).orElseThrow(() -> new NotFoundException(appointmentDTO.id()));
     appointment.setDate(appointmentDTO.date());
     appointment.setTime(appointmentDTO.time());
+    appointment.setStatus(AppointmentStatus.ACCEPTED);
     ar.save(appointment);
   }
 
-  public PageDTO getDoctorsAppointments(Doctor doctor, int page, int size, String orderBy) {
+  public Page<AppointmentDTO> getDoctorsAppointments(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Appointment> appointmentPage = ar.findByDoctor(doctor, pageable);
-    long totalPending = ar.getAppointmentsToApproveDoc(doctor.getId()).size();
-    Page<AppointmentDTO> appointmentsPageDTO = appointmentPage.map(this::convertAppointmentToDTO);
-
-    return new PageDTO(appointmentsPageDTO, totalPending);
+    Page<Appointment> appointmentPage = ar.getAcceptedDoctorAppointments(doctor.getId(), pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
   }
 
-  public PageDTO getPatientsAppointment(Patient currentPatient, int page, int size, String orderBy) {
+  public Page<AppointmentDTO> getDoctorsAppointmentsToAccept(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Appointment> appointmentPage = ar.findByPatient(currentPatient, pageable);
-    long totalPending = ar.getAppointmentsToApprovePat(currentPatient.getId()).size();
-    Page<AppointmentDTO> appointmentsPageDTO = appointmentPage.map(this::convertAppointmentToDTO);
-    return new PageDTO(appointmentsPageDTO, totalPending);
+    Page<Appointment> appointmentPage = ar.getAppointmentsToApproveDoc(doctor.getId(), pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
+  }
+
+  public Page<AppointmentDTO> getPatientsAppointment(Patient patient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Appointment> appointmentPage = ar.getAcceptedPatientAppointments(patient.getId(), pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
+  }
+
+  public Page<AppointmentDTO> getPatientsAppointmentsToAccept(Patient patient, int page, int size, String orderBy) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+    Page<Appointment> appointmentPage = ar.getAppointmentsToApprovePat(patient.getId(), pageable);
+    return appointmentPage.map(this::convertAppointmentToDTO);
   }
 
   public AppointmentDTO convertAppointmentToDTO(Appointment appointment) {
@@ -72,6 +76,7 @@ public class AppointmentsService {
             .time(appointment.getTime())
             .doctor(ds.convertToDoctorDTO(appointment.getDoctor()))
             .patient(ps.convertPatientResponse(appointment.getPatient()))
+            .status(String.valueOf(appointment.getStatus()))
             .build();
   }
 

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Random;
 
-import static com.ivanovvasil.CapstoneB.tools.Tools.generateRandomLocalTime;
 import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalCurentDate;
 
 @Component
@@ -44,7 +43,7 @@ public class AppointsmentsRunner implements ApplicationRunner {
 
         Appointment appointment = Appointment.builder()
                 .date(getRandomLocalCurentDate())
-                .time(generateRandomLocalTime())
+//                .time(generateRandomLocalTime())
                 .status(AppointmentStatus.ACCEPTED)
                 .doctor(doctor)
                 .patient(patient)
@@ -52,8 +51,6 @@ public class AppointsmentsRunner implements ApplicationRunner {
         as.save(appointment);
 
         Appointment appointment1 = Appointment.builder()
-                .date(getRandomLocalCurentDate())
-                .time(generateRandomLocalTime())
                 .status(AppointmentStatus.PENDING)
                 .doctor(doctor)
                 .patient(patient)
