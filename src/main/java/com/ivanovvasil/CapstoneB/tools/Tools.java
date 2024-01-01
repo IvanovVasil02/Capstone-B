@@ -29,7 +29,7 @@ public class Tools {
     int hour = random.nextInt(24);       // da 0 a 23
     int minute = random.nextInt(60);     // da 0 a 59
     int second = random.nextInt(60);     // da 0 a 59
-    int nano = random.nextInt(1_000_000_000); // da 0 a 999_999_999
+    int nano = random.nextInt(999_999_999 + 1); // da 0 a 999_999_999
 
     return LocalTime.of(hour, minute, second, nano);
   }

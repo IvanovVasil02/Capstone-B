@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.doctor;
 
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
+import com.ivanovvasil.CapstoneB.appointment.payloads.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
@@ -55,11 +56,21 @@ public class DoctorsController {
 
   @GetMapping("/appointments")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public PageDTO getAppointments(@AuthenticationPrincipal Doctor doctor,
-                                 @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "30") int size,
-                                 @RequestParam(defaultValue = "id") String orderBy) {
+  public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Doctor doctor,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "30") int size,
+                                              @RequestParam(defaultValue = "id") String orderBy) {
+    
     return as.getDoctorsAppointments(doctor, page, size, orderBy);
+  }
+
+  @GetMapping("/pendingAppointments")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  public Page<AppointmentDTO> getPendingAppointments(@AuthenticationPrincipal Doctor doctor,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "30") int size,
+                                                     @RequestParam(defaultValue = "id") String orderBy) {
+    return as.getDoctorsAppointmentsToAccept(doctor, page, size, orderBy);
   }
 
   @GetMapping("/prescriptions")
@@ -77,7 +88,7 @@ public class DoctorsController {
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "20") int size,
                                                          @RequestParam(defaultValue = "id") String orderBy) {
-    return prs.getDoctorPrescriptionsToApprove(doctor, page, size, orderBy);
+    return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
   @PutMapping("/prescriptions/{prescriptionId}")

@@ -14,5 +14,6 @@ public record AppointmentDTO(
         LocalDate date,
         LocalTime time,
         PatientResponseDTO patient,
-        DoctorDTO doctor) {
+        DoctorDTO doctor,
+        String status) {
 }

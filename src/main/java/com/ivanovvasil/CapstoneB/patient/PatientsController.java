@@ -1,6 +1,7 @@
 package com.ivanovvasil.CapstoneB.patient;
 
 import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
+import com.ivanovvasil.CapstoneB.appointment.payloads.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
@@ -56,21 +57,32 @@ public class PatientsController {
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "20") int size,
                                                          @RequestParam(defaultValue = "id") String orderBy) {
-    return prs.getPatientPrescriptionsToApprove(patient, page, size, orderBy);
+    return prs.getPrescriptionsToApprove(patient, page, size, orderBy);
   }
 
   @GetMapping("/appointments")
+  @PreAuthorize("hasAuthority('PATIENT')")
   @ResponseStatus(HttpStatus.OK)
-  public PageDTO getAppointments(@AuthenticationPrincipal Patient currentPatient,
-                                 @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "30") int size,
-                                 @RequestParam(defaultValue = "id") String orderBy) {
+  public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Patient currentPatient,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "30") int size,
+                                              @RequestParam(defaultValue = "id") String orderBy) {
     return aps.getPatientsAppointment(currentPatient, page, size, orderBy);
+  }
+
+  @GetMapping("/pendingAppointments")
+  @PreAuthorize("hasAuthority('PATIENT')")
+  public Page<AppointmentDTO> getPendingAppointments(@AuthenticationPrincipal Patient patient,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "30") int size,
+                                                     @RequestParam(defaultValue = "id") String orderBy) {
+    return aps.getPatientsAppointmentsToAccept(patient, page, size, orderBy);
   }
 
   @PostMapping("/takePrescription")
   @ResponseStatus(HttpStatus.CREATED)
-  public void prescriptionRequest(@AuthenticationPrincipal Patient currentUser, @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
+  public void prescriptionRequest(@AuthenticationPrincipal Patient currentUser,
+                                  @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
     prs.formatPrescription(currentUser, patientPrescriptionDTO);
   }
 
