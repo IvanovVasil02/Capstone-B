@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Repository
 public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
-  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id")
+  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id AND p.status = 'APPROVED'")
   Page<Prescription> findAllByPatientId(UUID id, Pageable pageable);
 
   List<Prescription> findAllByPatientId(UUID id);
@@ -23,11 +23,12 @@ public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
   @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'PENDING'")
   Page<Prescription> getPrescriptionsToApproveDoc(@Param("id") UUID id, Pageable pageable);
 
+  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'APPROVED'")
+  Page<Prescription> findByDoctorId(UUID id, Pageable pageable);
+
   @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING'")
   List<Prescription> getPrescriptionsToApprovePat(@Param("id") UUID id);
 
   @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING'")
   Page<Prescription> getPrescriptionsToApprovePat(@Param("id") UUID id, Pageable pageable);
-
-  Page<Prescription> findByDoctorId(UUID id, Pageable pageable);
 }
