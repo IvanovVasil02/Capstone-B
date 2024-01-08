@@ -5,20 +5,18 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
   private Enum<?>[] enums;
+  private boolean optional;
 
   @Override
   public void initialize(ValidEnum constraintAnnotation) {
     enums = constraintAnnotation.enumClass().getEnumConstants();
+    optional = constraintAnnotation.optional();
   }
 
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (value != null) {
-      for (Enum<?> enumValue : enums) {
-        if (enumValue.name().equals(value)) {
-          return true;
-        }
-      }
+    if (optional && value == null || value.isEmpty()) {
+      return true;
     }
 
     for (Enum<?> enumValue : enums) {
@@ -26,6 +24,6 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
         return true;
       }
     }
-    return true;
+    return false;
   }
 }

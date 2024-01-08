@@ -20,5 +20,7 @@ public @interface ValidEnum {
 
   Class<? extends Enum<?>> enumClass();
 
+  boolean optional() default false;
+
 }
 

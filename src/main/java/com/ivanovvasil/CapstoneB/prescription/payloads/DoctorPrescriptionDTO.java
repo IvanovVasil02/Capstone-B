@@ -10,9 +10,9 @@ import java.util.Set;
 public record DoctorPrescriptionDTO(
         Set<PrescriptionDetails> prescription,
         String diagnosticQuestion,
-        @ValidEnum(enumClass = PriorityPrescription.class, message = "Invalid parameter")
+        @ValidEnum(enumClass = PriorityPrescription.class, message = "Invalid parameter", optional = true)
         String priority,
-        @ValidEnum(enumClass = TypeRecipe.class, message = "Invalid parameter")
+        @ValidEnum(enumClass = TypeRecipe.class, message = "Invalid parameter", optional = true)
         String typeRecipe
 ) {
 }
