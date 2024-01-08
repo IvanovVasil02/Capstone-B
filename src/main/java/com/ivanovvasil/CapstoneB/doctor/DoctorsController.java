@@ -6,6 +6,7 @@ import com.ivanovvasil.CapstoneB.appointment.payloads.FixAppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorProfileDTO;
 import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
+import com.ivanovvasil.CapstoneB.exceptions.BadRequestException;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,7 +63,7 @@ public class DoctorsController {
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "30") int size,
                                               @RequestParam(defaultValue = "id") String orderBy) {
-    
+
     return as.getDoctorsAppointments(doctor, page, size, orderBy);
   }
 
@@ -91,10 +94,21 @@ public class DoctorsController {
     return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
+  @PostMapping("/createPrescription/{patientId}")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  @ResponseStatus(HttpStatus.CREATED)
+  public void createPrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID patientId, @Validated @RequestBody DoctorPrescriptionDTO body, BindingResult validation) {
+    if (validation.hasErrors()) {
+      throw new BadRequestException("empty field", validation.getAllErrors());
+    } else {
+      prs.createPrescription(doctor, patientId, body);
+    }
+  }
+
   @PutMapping("/prescriptions/{prescriptionId}")
   @PreAuthorize("hasAuthority('DOCTOR')")
   @ResponseStatus(HttpStatus.OK)
-  public void ApprovePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId, @RequestBody DoctorPrescriptionDTO body) {
+  public void approvePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId, @RequestBody DoctorPrescriptionDTO body) {
     prs.save(doctor.getId(), prescriptionId, body);
   }
 

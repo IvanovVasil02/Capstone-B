@@ -14,7 +14,7 @@ import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.MedicinePrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDetailsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,15 +79,15 @@ public class PrescriptionsService {
 
   }
 
-  public void formatPrescription(Patient patient, PatientPrescriptionDTO patientPrescriptionDTO) {
+  public void formatPrescription(Patient patient, MedicinePrescriptionDTO medicinePrescriptionDTO) {
 
-    Set<PrescriptionDetails> prescriptionDetailsSet = patientPrescriptionDTO.prescription();
+    Set<PrescriptionDetails> prescriptionDetailsSet = medicinePrescriptionDTO.prescription();
     int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
 
     Prescription prescription = Prescription.builder()
             .status(PrescriptionStatus.PENDING)
             .patient(patient)
-            .prescription(patientPrescriptionDTO.prescription())
+            .prescription(medicinePrescriptionDTO.prescription())
             .packagesNumber(packagingCount)
             .region(patient.getMunicipality().getRegion())
             .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
@@ -170,6 +170,43 @@ public class PrescriptionsService {
             .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
             .quantity(prescriptionDetails.getQuantity())
             .build();
+  }
+
+  public void createPrescription(Doctor doctor, UUID patientId, DoctorPrescriptionDTO body) {
+    Patient patient = ps.getPatientById(patientId);
+    Set<PrescriptionDetails> prescriptionDetailsSet = body.prescription();
+    int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
+    Prescription prescription = Prescription
+            .builder()
+            .issuingDate(LocalDate.now())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
+            .doctor(doctor)
+            .patient(patient)
+            .status(PrescriptionStatus.APPROVED)
+            .region(patient.getMunicipality().getRegion())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .diagnosticQuestion(body.diagnosticQuestion())
+            .packagesNumber(packagingCount)
+            .build();
+    this.save(prescription);
+
+    if (body.typeRecipe() != null && !body.typeRecipe().isEmpty()) {
+      System.out.println("TypeRecipe value: " + body.typeRecipe());
+      prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
+      this.save(prescription);
+    }
+    if (body.priority() != null && !body.priority().isEmpty()) {
+      prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
+      this.save(prescription);
+    }
+
+    for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+      Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
+      prescriptionDetails.setMedicine(medicine);
+      prescriptionDetails.setPrescription(prescription);
+      prsd.save(prescriptionDetails);
+    }
   }
 
 }
