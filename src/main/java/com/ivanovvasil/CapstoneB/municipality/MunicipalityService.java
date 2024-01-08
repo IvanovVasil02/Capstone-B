@@ -1,5 +1,6 @@
 package com.ivanovvasil.CapstoneB.municipality;
 
+import com.ivanovvasil.CapstoneB.exceptions.BadRequestException;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -61,6 +62,6 @@ public class MunicipalityService {
   }
 
   public Municipality findByPostalCode(String code) {
-    return mr.findFirstByPostalCode(code);
+    return mr.findFirstByPostalCode(code).orElseThrow(() -> new BadRequestException("Postal code does not exist: " + code));
   }
 }
