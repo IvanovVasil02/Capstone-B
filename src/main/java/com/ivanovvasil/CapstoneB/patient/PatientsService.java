@@ -75,6 +75,7 @@ public class PatientsService {
 
   public PatientResponseDTO convertPatientResponse(Patient patient) {
     return PatientResponseDTO.builder()
+            .patientId(patient.getId())
             .name(patient.getName())
             .surname(patient.getSurname())
             .birthDate(patient.getBirthDate())
