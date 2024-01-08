@@ -4,15 +4,18 @@ import com.ivanovvasil.CapstoneB.appointment.AppointmentsService;
 import com.ivanovvasil.CapstoneB.appointment.payloads.AppointmentDTO;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
 import com.ivanovvasil.CapstoneB.doctor.payloads.PageDTO;
+import com.ivanovvasil.CapstoneB.exceptions.BadRequestException;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PatientPrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.MedicinePrescriptionDTO;
 import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -82,8 +85,13 @@ public class PatientsController {
   @PostMapping("/takePrescription")
   @ResponseStatus(HttpStatus.CREATED)
   public void prescriptionRequest(@AuthenticationPrincipal Patient currentUser,
-                                  @RequestBody PatientPrescriptionDTO patientPrescriptionDTO) {
-    prs.formatPrescription(currentUser, patientPrescriptionDTO);
+                                  @Validated @RequestBody MedicinePrescriptionDTO medicinePrescriptionDTO,
+                                  BindingResult validation) {
+    if (validation.hasErrors()) {
+      throw new BadRequestException("Empty or not respected fields", validation.getAllErrors());
+    } else {
+      prs.formatPrescription(currentUser, medicinePrescriptionDTO);
+    }
   }
 
   @PostMapping("/askAppointment")
