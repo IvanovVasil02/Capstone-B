@@ -50,7 +50,7 @@ public class PatientsController {
   public PageDTO getPrescriptions(@AuthenticationPrincipal Patient currentPatient,
                                   @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "30") int size,
-                                  @RequestParam(defaultValue = "id") String orderBy) {
+                                  @RequestParam(defaultValue = "issuingDate") String orderBy) {
     return prs.getPatientsPrescriptions(currentPatient, page, size, orderBy);
   }
 
@@ -59,7 +59,7 @@ public class PatientsController {
   public Page<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Patient patient,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "20") int size,
-                                                         @RequestParam(defaultValue = "id") String orderBy) {
+                                                         @RequestParam(defaultValue = "issuingDate") String orderBy) {
     return prs.getPrescriptionsToApprove(patient, page, size, orderBy);
   }
 
@@ -69,7 +69,7 @@ public class PatientsController {
   public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Patient currentPatient,
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "30") int size,
-                                              @RequestParam(defaultValue = "id") String orderBy) {
+                                              @RequestParam(defaultValue = "date") String orderBy) {
     return aps.getPatientsAppointment(currentPatient, page, size, orderBy);
   }
 
@@ -78,7 +78,7 @@ public class PatientsController {
   public Page<AppointmentDTO> getPendingAppointments(@AuthenticationPrincipal Patient patient,
                                                      @RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "30") int size,
-                                                     @RequestParam(defaultValue = "id") String orderBy) {
+                                                     @RequestParam(defaultValue = "date") String orderBy) {
     return aps.getPatientsAppointmentsToAccept(patient, page, size, orderBy);
   }
 

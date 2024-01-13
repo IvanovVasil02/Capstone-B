@@ -32,7 +32,7 @@ public class PatientsRunner implements ApplicationRunner {
   MunicipalityService ms;
   @Autowired
   PasswordEncoder bcrypt;
-  private boolean executed = true;
+  private boolean executed = false;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -44,13 +44,15 @@ public class PatientsRunner implements ApplicationRunner {
 
       for (int i = 0; i < 50; i++) {
         Municipality municipality = municipalities.get(new Random().nextInt(0, municipalities.size() - 1));
-        Patient patient = new Patient(faker.name().firstName(),
-                faker.name().lastName(),
-                getRandomLocalDate(),
+        String name = faker.name().firstName();
+        String surname = faker.name().lastName();
+        Patient patient = new Patient(name,
+                surname,
+                getRandomLocalDate(1985),
                 sex[new Random().nextInt(0, 1)],
                 faker.address().streetAddress(),
                 municipality,
-                faker.internet().emailAddress(),
+                (name + "." + surname + "@gmail.com").toLowerCase(),
                 bcrypt.encode("12345"),
                 faker.phoneNumber().phoneNumber(),
                 UserRole.PATIENT,

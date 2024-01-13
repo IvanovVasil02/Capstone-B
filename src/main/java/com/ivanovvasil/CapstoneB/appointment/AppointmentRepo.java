@@ -11,15 +11,15 @@ import java.util.UUID;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, UUID> {
-  @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :id AND a.status = 'PENDING'")
+  @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :id AND a.status = 'PENDING' order by a.date desc")
   Page<Appointment> getAppointmentsToApproveDoc(@Param("id") UUID id, Pageable pageable);
 
-  @Query("SELECT a FROM Appointment a WHERE a.patient.id = :id AND a.status = 'PENDING'")
+  @Query("SELECT a FROM Appointment a WHERE a.patient.id = :id AND a.status = 'PENDING' order by a.date desc")
   Page<Appointment> getAppointmentsToApprovePat(@Param("id") UUID id, Pageable pageable);
 
-  @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :id AND a.status = 'ACCEPTED'")
+  @Query("SELECT a FROM Appointment a WHERE a.doctor.id = :id AND a.status = 'ACCEPTED' order by a.date desc")
   Page<Appointment> getAcceptedDoctorAppointments(@Param("id") UUID id, Pageable pageable);
 
-  @Query("SELECT a FROM Appointment a WHERE a.patient.id = :id AND a.status = 'ACCEPTED'")
+  @Query("SELECT a FROM Appointment a WHERE a.patient.id = :id AND a.status = 'ACCEPTED' order by a.date desc")
   Page<Appointment> getAcceptedPatientAppointments(@Param("id") UUID id, Pageable pageable);
 }

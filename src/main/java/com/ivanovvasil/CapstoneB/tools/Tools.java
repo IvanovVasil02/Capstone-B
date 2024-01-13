@@ -9,8 +9,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Tools {
 
 
-  public static LocalDate getRandomLocalDate() {
-    LocalDate startDate = LocalDate.of(1980, 1, 1);
+  public static LocalDate getRandomLocalDate(int startYear) {
+    LocalDate startDate = LocalDate.of(startYear, 1, 1);
     LocalDate endDate = LocalDate.now();
 
     long startEpochDay = startDate.toEpochDay();

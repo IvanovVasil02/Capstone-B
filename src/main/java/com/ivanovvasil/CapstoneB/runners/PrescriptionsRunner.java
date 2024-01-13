@@ -33,7 +33,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
   PrescriptionsService prs;
   @Autowired
   PrescriptionDetailsRepo prsd;
-  private Boolean executed = true;
+  private Boolean executed = false;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -54,7 +54,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .localHealthCode(currentPatient.getHealthCompanyCode())
                 .status(PrescriptionStatus.APPROVED)
-                .issuingDate(getRandomLocalDate())
+                .issuingDate(getRandomLocalDate(2023))
                 .build();
 
         for (int j = 0; j < new Random().nextInt(1, 3); j++) {
@@ -88,7 +88,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .localHealthCode(currentPatient.getHealthCompanyCode())
                 .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .status(PrescriptionStatus.PENDING)
-                .issuingDate(getRandomLocalDate())
+                .issuingDate(getRandomLocalDate(2023))
                 .build();
 
         for (int j = 0; j < new Random().nextInt(1, 3); j++) {

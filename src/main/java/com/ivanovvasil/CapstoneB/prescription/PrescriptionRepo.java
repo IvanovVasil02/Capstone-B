@@ -12,23 +12,23 @@ import java.util.UUID;
 
 @Repository
 public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
-  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id AND p.status = 'APPROVED'")
+  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id AND p.status = 'APPROVED' order by p.issuingDate desc")
   Page<Prescription> findAllByPatientId(UUID id, Pageable pageable);
 
   List<Prescription> findAllByPatientId(UUID id);
 
-  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'PENDING'")
+  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'PENDING' order by p.issuingDate desc")
   List<Prescription> getPrescriptionsToApproveDoc(@Param("id") UUID id);
 
-  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'PENDING'")
+  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'PENDING' order by p.issuingDate desc")
   Page<Prescription> getPrescriptionsToApproveDoc(@Param("id") UUID id, Pageable pageable);
 
-  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'APPROVED'")
+  @Query("SELECT p FROM Prescription p WHERE p.doctor.id = :id and p.status = 'APPROVED' order by p.issuingDate desc")
   Page<Prescription> findByDoctorId(UUID id, Pageable pageable);
 
-  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING'")
+  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING' order by p.issuingDate desc")
   List<Prescription> getPrescriptionsToApprovePat(@Param("id") UUID id);
 
-  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING'")
+  @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING' order by p.issuingDate desc")
   Page<Prescription> getPrescriptionsToApprovePat(@Param("id") UUID id, Pageable pageable);
 }

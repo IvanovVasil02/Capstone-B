@@ -45,9 +45,9 @@ public class DoctorsController {
   @GetMapping("/patients")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Page<PatientResponseDTO> getDoctorPatientsList(@AuthenticationPrincipal Doctor doctor,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "30") int size,
-      @RequestParam(defaultValue = "id") String orderBy) {
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "30") int size,
+                                                        @RequestParam(defaultValue = "id") String orderBy) {
     return ps.getPatientsList(doctor, page, size, orderBy);
   }
 
@@ -60,36 +60,36 @@ public class DoctorsController {
   @GetMapping("/appointments")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Page<AppointmentDTO> getAppointments(@AuthenticationPrincipal Doctor doctor,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "30") int size,
-      @RequestParam(defaultValue = "id") String orderBy) {
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "30") int size,
+                                              @RequestParam(defaultValue = "date") String orderBy) {
     return as.getDoctorsAppointments(doctor, page, size, orderBy);
   }
 
   @GetMapping("/pendingAppointments")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Page<AppointmentDTO> getPendingAppointments(@AuthenticationPrincipal Doctor doctor,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "30") int size,
-      @RequestParam(defaultValue = "id") String orderBy) {
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "30") int size,
+                                                     @RequestParam(defaultValue = "date") String orderBy) {
     return as.getDoctorsAppointmentsToAccept(doctor, page, size, orderBy);
   }
 
   @GetMapping("/prescriptions")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public PageDTO getPrescriptions(@AuthenticationPrincipal Doctor doctor,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size,
-      @RequestParam(defaultValue = "id") String orderBy) {
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size,
+                                  @RequestParam(defaultValue = "issuingDate") String orderBy) {
     return prs.getDoctorPrescriptions(doctor, page, size, orderBy);
   }
 
   @GetMapping("/prescriptionsToApp")
   @PreAuthorize("hasAuthority('DOCTOR')")
   public Page<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor,
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "20") int size,
-      @RequestParam(defaultValue = "id") String orderBy) {
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "20") int size,
+                                                         @RequestParam(defaultValue = "issuingDate") String orderBy) {
     return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
@@ -97,7 +97,7 @@ public class DoctorsController {
   @PreAuthorize("hasAuthority('DOCTOR')")
   @ResponseStatus(HttpStatus.CREATED)
   public void createPrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID patientId,
-      @Validated @RequestBody DoctorPrescriptionDTO body, BindingResult validation) {
+                                 @Validated @RequestBody DoctorPrescriptionDTO body, BindingResult validation) {
     if (validation.hasErrors()) {
       throw new BadRequestException("empty field", validation.getAllErrors());
     } else {
@@ -109,7 +109,7 @@ public class DoctorsController {
   @PreAuthorize("hasAuthority('DOCTOR')")
   @ResponseStatus(HttpStatus.OK)
   public void approvePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId,
-      @RequestBody DoctorPrescriptionDTO body) {
+                                  @RequestBody DoctorPrescriptionDTO body) {
     prs.save(doctor.getId(), prescriptionId, body);
   }
 
