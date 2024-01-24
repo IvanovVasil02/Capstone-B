@@ -19,6 +19,7 @@ public record PatientResponseDTO(
         String address,
         String municipalityDenomination,
         String municipality,
+        String region,
         String email,
         String phoneNumber,
         DoctorProfileDTO doctor,

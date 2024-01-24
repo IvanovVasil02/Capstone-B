@@ -31,4 +31,6 @@ public interface PrescriptionRepo extends JpaRepository<Prescription, UUID> {
 
   @Query("SELECT p FROM Prescription p WHERE p.patient.id = :id and p.status = 'PENDING' order by p.issuingDate desc")
   Page<Prescription> getPrescriptionsToApprovePat(@Param("id") UUID id, Pageable pageable);
+
+
 }

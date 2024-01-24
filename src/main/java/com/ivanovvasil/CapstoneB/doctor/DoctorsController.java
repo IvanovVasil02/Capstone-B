@@ -11,7 +11,7 @@ import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.PrescriptionsService;
 import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.PendingPrescriptionsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -86,10 +86,10 @@ public class DoctorsController {
 
   @GetMapping("/prescriptionsToApp")
   @PreAuthorize("hasAuthority('DOCTOR')")
-  public Page<PrescriptionDTO> getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "20") int size,
-                                                         @RequestParam(defaultValue = "issuingDate") String orderBy) {
+  public PendingPrescriptionsDTO getPrescriptionsToApprove(@AuthenticationPrincipal Doctor doctor,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "20") int size,
+                                                           @RequestParam(defaultValue = "issuingDate") String orderBy) {
     return prs.getPrescriptionsToApprove(doctor, page, size, orderBy);
   }
 
@@ -111,6 +111,13 @@ public class DoctorsController {
   public void approvePrescription(@AuthenticationPrincipal Doctor doctor, @PathVariable UUID prescriptionId,
                                   @RequestBody DoctorPrescriptionDTO body) {
     prs.save(doctor.getId(), prescriptionId, body);
+  }
+
+  @PostMapping("/approveMultiplePrescriptions")
+  @PreAuthorize("hasAuthority('DOCTOR')")
+  @ResponseStatus(HttpStatus.OK)
+  public void approvePrescriptions(@RequestBody UUID[] prescriptions) {
+    prs.approveMultiplePrescriptions(prescriptions);
   }
 
   @PutMapping("/fixAppointment")

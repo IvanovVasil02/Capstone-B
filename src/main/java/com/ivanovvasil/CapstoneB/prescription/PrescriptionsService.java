@@ -1,6 +1,5 @@
 package com.ivanovvasil.CapstoneB.prescription;
 
-import com.ivanovvasil.CapstoneB.ASL.ASLCodes.ASLService;
 import com.ivanovvasil.CapstoneB.Medicine.Medicine;
 import com.ivanovvasil.CapstoneB.Medicine.MedicinesService;
 import com.ivanovvasil.CapstoneB.doctor.Doctor;
@@ -11,20 +10,18 @@ import com.ivanovvasil.CapstoneB.exceptions.UnauthorizedException;
 import com.ivanovvasil.CapstoneB.patient.Patient;
 import com.ivanovvasil.CapstoneB.patient.PatientsService;
 import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
+import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionVerificationStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
-import com.ivanovvasil.CapstoneB.prescription.payloads.DoctorPrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.MedicinePrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDTO;
-import com.ivanovvasil.CapstoneB.prescription.payloads.PrescriptionDetailsDTO;
+import com.ivanovvasil.CapstoneB.prescription.payloads.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -35,8 +32,6 @@ public class PrescriptionsService {
   @Autowired
   PrescriptionRepo pr;
   @Autowired
-  ASLService as;
-  @Autowired
   MedicinesService ms;
   @Autowired
   PatientsService ps;
@@ -45,15 +40,16 @@ public class PrescriptionsService {
   @Autowired
   PrescriptionDetailsRepo prsd;
 
-  public void save(Prescription prescription) {
-    pr.save(prescription);
+  public Prescription save(Prescription prescription) {
+    return pr.save(prescription);
   }
 
-  public Prescription save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
-    Prescription prescription = this.findById(prescriptionId);
 
+  @Transactional
+  public void save(UUID doctorId, UUID prescriptionId, DoctorPrescriptionDTO body) {
+    Prescription prescription = this.findById(prescriptionId);
     if (prescription.getDoctor().getId().equals(doctorId)) {
-      prescription.setIssuingDate(LocalDate.now());
+      prescription.setIssuingDate(LocalDateTime.now());
       if (!body.priority().isEmpty()) {
         prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
       }
@@ -61,41 +57,58 @@ public class PrescriptionsService {
         prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
       }
       if (!body.prescription().isEmpty()) {
-        Set<PrescriptionDetails> prescriptionDetailsSet = body.prescription();
-        List<PrescriptionDetails> oldPrescriptionDetails = prsd.findAllByPrescriptionId(prescription.getId());
-        oldPrescriptionDetails.forEach((item) -> prsd.deleteById(item.getId()));
-        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+        List<PrescriptionDetails> oldPrescription = prsd.findAllByPrescriptionId(prescriptionId);
+        System.out.println(prescriptionId);
+        prsd.deleteByPrescriptionId(prescriptionId);
+
+        for (PrescriptionDetails prescriptionDetails : body.prescription()) {
           Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
-          prescriptionDetails.setMedicine(medicine);
-          prescriptionDetails.setPrescription(prescription);
-          prsd.save(prescriptionDetails);
+          PrescriptionDetails newPrescriptionDetails = PrescriptionDetails.builder()
+                  .prescription(prescription)
+                  .medicine(medicine)
+                  .note(prescriptionDetails.getNote())
+                  .quantity(prescriptionDetails.getQuantity())
+                  .build();
+          prsd.save(newPrescriptionDetails);
         }
       }
       prescription.setStatus(PrescriptionStatus.APPROVED);
-      return pr.save(prescription);
+      prescription.setVerificationStatus(PrescriptionVerificationStatus.VERIFIED);
+      pr.save(prescription);
+
+
     } else {
       throw new UnauthorizedException("Permissions denied for this recipe");
     }
 
   }
 
-  public void formatPrescription(Patient patient, MedicinePrescriptionDTO medicinePrescriptionDTO) {
-
-    Set<PrescriptionDetails> prescriptionDetailsSet = medicinePrescriptionDTO.prescription();
+  public void createPrescription(Doctor doctor, UUID patientId, DoctorPrescriptionDTO body) {
+    Patient patient = ps.getPatientById(patientId);
+    List<PrescriptionDetails> prescriptionDetailsSet = body.prescription();
     int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
-
-    Prescription prescription = Prescription.builder()
-        .status(PrescriptionStatus.PENDING)
-        .patient(patient)
-        .prescription(medicinePrescriptionDTO.prescription())
-        .packagesNumber(packagingCount)
-        .region(patient.getMunicipality().getRegion())
-        .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
-        .localHealthCode(patient.getHealthCompanyCode())
-        .issuingDate(LocalDate.now())
-        .doctor(patient.getDoctor())
-        .build();
+    Prescription prescription = Prescription
+            .builder()
+            .issuingDate(LocalDateTime.now())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
+            .doctor(doctor)
+            .patient(patient)
+            .status(PrescriptionStatus.APPROVED)
+            .verificationStatus(PrescriptionVerificationStatus.VERIFIED)
+            .region(patient.getMunicipality().getRegion())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .diagnosticQuestion(body.diagnosticQuestion())
+            .packagesNumber(packagingCount)
+            .build();
     this.save(prescription);
+
+    if (StringUtils.isNotEmpty(body.typeRecipe())) {
+      prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
+    }
+    if (StringUtils.isNotEmpty(body.priority())) {
+      prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
+    }
 
     for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
       Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
@@ -103,6 +116,37 @@ public class PrescriptionsService {
       prescriptionDetails.setPrescription(prescription);
       prsd.save(prescriptionDetails);
     }
+    this.save(prescription);
+  }
+
+
+  public void formatPrescription(Patient patient, MedicinePrescriptionDTO medicinePrescriptionDTO) {
+
+    List<PrescriptionDetails> prescriptionDetailsList = medicinePrescriptionDTO.prescription();
+    int packagingCount = prescriptionDetailsList.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
+
+    Prescription prescription = Prescription.builder()
+            .status(PrescriptionStatus.PENDING)
+            .patient(patient)
+            .prescription(medicinePrescriptionDTO.prescription())
+            .packagesNumber(packagingCount)
+            .region(patient.getMunicipality().getRegion())
+            .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
+            .localHealthCode(patient.getHealthCompanyCode())
+            .issuingDate(LocalDateTime.now())
+            .doctor(patient.getDoctor())
+            .build();
+    this.save(prescription);
+
+    for (PrescriptionDetails prescriptionDetails : prescriptionDetailsList) {
+      Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
+      prescriptionDetails.setMedicine(medicine);
+      prescriptionDetails.setPrescription(prescription);
+      prsd.save(prescriptionDetails);
+    }
+
+    List<Prescription> patientPrescriptions = patient.getPrescriptions();
+    this.verifyPrsecription(patientPrescriptions, prescription);
   }
 
   public Prescription findById(UUID id) {
@@ -115,10 +159,27 @@ public class PrescriptionsService {
     return prescriptionList.map(this::convertToPrescriptionDTO);
   }
 
-  public Page<PrescriptionDTO> getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
+  public PendingPrescriptionsDTO getPrescriptionsToApprove(Doctor doctor, int page, int size, String orderBy) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
-    Page<Prescription> prescriptionList = pr.getPrescriptionsToApproveDoc(doctor.getId(), pageable);
-    return prescriptionList.map(this::convertToPrescriptionDTO);
+    List<Prescription> pendingPrescriptions = pr.getPrescriptionsToApproveDoc(doctor.getId());
+
+    List<PrescriptionDTO> noVerifiedPrescriptions = pendingPrescriptions.stream()
+            .filter(prescription -> !this.isVerifiedPrescription(prescription))
+            .map(this::convertToPrescriptionDTO)
+            .toList();
+
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), noVerifiedPrescriptions.size());
+    Page<PrescriptionDTO> noVerifiedPrescriptionPage = new PageImpl<>(noVerifiedPrescriptions.subList(start, end), pageable, noVerifiedPrescriptions.size());
+
+    List<PrescriptionDTO> verifiedPrescriptions = pendingPrescriptions.stream()
+            .filter(this::isVerifiedPrescription)
+            .map(this::convertToPrescriptionDTO)
+            .toList();
+    end = Math.min((start + pageable.getPageSize()), verifiedPrescriptions.size());
+    Page<PrescriptionDTO> verifiedPrescriptionPage = new PageImpl<>(verifiedPrescriptions.subList(start, end), pageable, verifiedPrescriptions.size());
+
+    return new PendingPrescriptionsDTO(noVerifiedPrescriptionPage, verifiedPrescriptionPage);
   }
 
   public Page<PrescriptionDTO> getPatientPrescriptionsToApprove(Patient patient, int page, int size, String orderBy) {
@@ -147,66 +208,59 @@ public class PrescriptionsService {
     return new PageDTO(prescriptionDTOS, totalPending);
   }
 
+
+  public void approveMultiplePrescriptions(UUID[] prescriptions) {
+    Arrays.stream(prescriptions).forEach((prescriptionId) -> {
+      Prescription prescription = this.findById(prescriptionId);
+      prescription.setStatus(PrescriptionStatus.APPROVED);
+      this.save(prescription);
+    });
+  }
+
+  public void verifyPrsecription(List<Prescription> patientPrescriptions, Prescription prescription) {
+    boolean foundEqual = false;
+
+    for (Prescription oldPrescription : patientPrescriptions) {
+      if (oldPrescription.equals(prescription)) {
+        prescription.setVerificationStatus(PrescriptionVerificationStatus.VERIFIED);
+        foundEqual = true;
+        break;
+      }
+    }
+
+    if (!foundEqual) {
+      prescription.setVerificationStatus(PrescriptionVerificationStatus.NOT_VERIFIED);
+    }
+    this.save(prescription);
+  }
+
+  public Boolean isVerifiedPrescription(Prescription prescription) {
+    return prescription.getVerificationStatus() == PrescriptionVerificationStatus.VERIFIED;
+  }
+
   public PrescriptionDTO convertToPrescriptionDTO(Prescription prescription) {
     Set<PrescriptionDetailsDTO> prescriptionDetailsDTOList = prescription.getPrescription()
-        .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
+            .stream().map((this::convertToPrescriptionDetailsDTO)).collect(Collectors.toSet());
     return PrescriptionDTO.builder()
-        .prescriptionID(prescription.getId())
-        .patient(ps.convertPatientResponse(prescription.getPatient()))
-        .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
-        .prescription(prescriptionDetailsDTOList)
-        .packagesNumber(prescription.getPackagesNumber())
-        .region(prescription.getRegion())
-        .provinceAbbr(prescription.getProvinceAbbr())
-        .localHealthCode(prescription.getLocalHealthCode())
-        .isssuingDate(prescription.getIssuingDate())
-        .status(prescription.getStatus())
-        .build();
+            .prescriptionID(prescription.getId())
+            .patient(ps.convertPatientResponse(prescription.getPatient()))
+            .doctor(ds.convertToDoctorDTO(prescription.getDoctor()))
+            .prescription(prescriptionDetailsDTOList)
+            .packagesNumber(prescription.getPackagesNumber())
+            .region(prescription.getRegion())
+            .provinceAbbr(prescription.getProvinceAbbr())
+            .localHealthCode(prescription.getLocalHealthCode())
+            .issuingDate(prescription.getIssuingDate())
+            .status(prescription.getStatus())
+            .verificationStatus(prescription.getVerificationStatus())
+            .build();
   }
 
   public PrescriptionDetailsDTO convertToPrescriptionDetailsDTO(PrescriptionDetails prescriptionDetails) {
     return PrescriptionDetailsDTO.builder()
-        .id(prescriptionDetails.getId())
-        .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
-        .quantity(prescriptionDetails.getQuantity())
-        .build();
+            .id(prescriptionDetails.getId())
+            .medicine(ms.convertMedicineToDTO(prescriptionDetails.getMedicine()))
+            .quantity(prescriptionDetails.getQuantity())
+            .build();
   }
-
-  public void createPrescription(Doctor doctor, UUID patientId, DoctorPrescriptionDTO body) {
-    Patient patient = ps.getPatientById(patientId);
-    Set<PrescriptionDetails> prescriptionDetailsSet = body.prescription();
-    int packagingCount = prescriptionDetailsSet.stream().mapToInt(PrescriptionDetails::getQuantity).sum();
-    Prescription prescription = Prescription
-        .builder()
-        .issuingDate(LocalDate.now())
-        .localHealthCode(patient.getHealthCompanyCode())
-        .provinceAbbr(patient.getMunicipality().getProvinceAbbr())
-        .doctor(doctor)
-        .patient(patient)
-        .status(PrescriptionStatus.APPROVED)
-        .region(patient.getMunicipality().getRegion())
-        .localHealthCode(patient.getHealthCompanyCode())
-        .diagnosticQuestion(body.diagnosticQuestion())
-        .packagesNumber(packagingCount)
-        .build();
-    this.save(prescription);
-
-    if (body.typeRecipe() != null && !body.typeRecipe().isEmpty()) {
-      System.out.println("TypeRecipe value: " + body.typeRecipe());
-      prescription.setTypeRecipe(TypeRecipe.valueOf(body.typeRecipe()));
-      this.save(prescription);
-    }
-    if (body.priority() != null && !body.priority().isEmpty()) {
-      prescription.setPriorityPrescription(PriorityPrescription.valueOf(body.priority()));
-      this.save(prescription);
-    }
-
-    for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
-      Medicine medicine = ms.findById(prescriptionDetails.getMedicine().getId());
-      prescriptionDetails.setMedicine(medicine);
-      prescriptionDetails.setPrescription(prescription);
-      prsd.save(prescriptionDetails);
-    }
-  }
-
 }

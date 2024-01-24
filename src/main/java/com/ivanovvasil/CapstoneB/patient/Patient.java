@@ -12,6 +12,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -30,8 +31,8 @@ public class Patient extends User {
   private List<Exemption> exemptions;
   @OneToMany(mappedBy = "patient")
   private Set<Appointment> appointments;
-  @OneToMany(mappedBy = "patient")
-  private List<Prescription> prescriptionSet;
+  @OneToMany(mappedBy = "patient", fetch = FetchType.EAGER)
+  private List<Prescription> prescriptions;
 
   public Patient(String name, String surname, LocalDate birthDate, String sex, String address,
                  Municipality municipality, String email, String password, String phoneNumber, UserRole role, Doctor doctor) {
@@ -39,22 +40,12 @@ public class Patient extends User {
     this.doctor = doctor;
   }
 
-//  @Override
-//  public String toString() {
-//    return "Patient{" +
-//            "doctor=" + doctor.getName() +
-//            ", healthCompanyCode='" + healthCompanyCode + '\'' +
-//            ", name='" + name + '\'' +
-//            ", surname='" + surname + '\'' +
-//            ", birthDate=" + birthDate +
-//            ", sex='" + sex + '\'' +
-//            ", fiscalCode='" + fiscalCode + '\'' +
-//            ", address='" + address + '\'' +
-//            ", email='" + email + '\'' +
-//            ", password='" + password + '\'' +
-//            ", phoneNumber='" + phoneNumber + '\'' +
-//            ", municipality='" + municipality.getMunicipality() + '\'' +
-//            ", role=" + role +
-//            "} " + super.toString();
-//  }
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    Patient patient = (Patient) object;
+    return Objects.equals(doctor, patient.doctor);
+  }
+  
 }

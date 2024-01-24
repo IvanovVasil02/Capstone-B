@@ -15,12 +15,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-
-import static com.ivanovvasil.CapstoneB.tools.Tools.getRandomLocalDate;
 
 @Component
 @Order(8)
@@ -33,7 +30,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
   PrescriptionsService prs;
   @Autowired
   PrescriptionDetailsRepo prsd;
-  private Boolean executed = false;
+  private Boolean executed = true;
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
@@ -44,7 +41,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
 
       for (int i = 0; i < 200; i++) {
         Patient currentPatient = patientList.get(new Random().nextInt(0, patientList.size()));
-        Set<PrescriptionDetails> prescriptionDetailsSet = new HashSet<>();
+        List<PrescriptionDetails> prescriptionDetailsList = new ArrayList<>();
 
         Prescription prescription = Prescription.builder()
                 .patient(currentPatient)
@@ -54,7 +51,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .localHealthCode(currentPatient.getHealthCompanyCode())
                 .status(PrescriptionStatus.APPROVED)
-                .issuingDate(getRandomLocalDate(2023))
+//                .issuingDate(getRandomLocalDate(2023))
                 .build();
 
         for (int j = 0; j < new Random().nextInt(1, 3); j++) {
@@ -65,20 +62,21 @@ public class PrescriptionsRunner implements ApplicationRunner {
                   .quantity(new Random().nextInt(1, 2))
                   .prescription(prescription)
                   .build();
-          prescriptionDetailsSet.add(prescriptionDetails);
+          prescriptionDetailsList.add(prescriptionDetails);
         }
 
-        prescription.setPrescription(prescriptionDetailsSet);
+        prescription.setPrescription(prescriptionDetailsList);
         prs.save(prescription);
 
-        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsList) {
           prescriptionDetails.setPrescription(prescription);
           prsd.save(prescriptionDetails);
         }
+        prs.verifyPrsecription(currentPatient.getPrescriptions(), prescription);
       }
       for (int i = 0; i < 200; i++) {
         Patient currentPatient = patientList.get(new Random().nextInt(0, patientList.size()));
-        Set<PrescriptionDetails> prescriptionDetailsSet = new HashSet<>();
+        List<PrescriptionDetails> prescriptionDetailsList = new ArrayList<>();
 
         Prescription prescription = Prescription.builder()
                 .patient(currentPatient)
@@ -88,7 +86,7 @@ public class PrescriptionsRunner implements ApplicationRunner {
                 .localHealthCode(currentPatient.getHealthCompanyCode())
                 .provinceAbbr(currentPatient.getMunicipality().getProvinceAbbr())
                 .status(PrescriptionStatus.PENDING)
-                .issuingDate(getRandomLocalDate(2023))
+//                .issuingDate(getRandomLocalDate(2023))
                 .build();
 
         for (int j = 0; j < new Random().nextInt(1, 3); j++) {
@@ -99,16 +97,17 @@ public class PrescriptionsRunner implements ApplicationRunner {
                   .quantity(new Random().nextInt(1, 2))
                   .prescription(prescription)
                   .build();
-          prescriptionDetailsSet.add(prescriptionDetails);
+          prescriptionDetailsList.add(prescriptionDetails);
         }
 
-        prescription.setPrescription(prescriptionDetailsSet);
+        prescription.setPrescription(prescriptionDetailsList);
         prs.save(prescription);
 
-        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsSet) {
+        for (PrescriptionDetails prescriptionDetails : prescriptionDetailsList) {
           prescriptionDetails.setPrescription(prescription);
           prsd.save(prescriptionDetails);
         }
+        prs.verifyPrsecription(currentPatient.getPrescriptions(), prescription);
       }
 
       executed = true;
