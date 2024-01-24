@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -36,5 +37,14 @@ public class Doctor extends User {
     this.expirationOfLicense = expirationOfLicense;
     this.emergencyContact = emergencyContact;
   }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    Doctor doctor = (Doctor) object;
+    return Objects.equals(studioAddress, doctor.studioAddress) && Objects.equals(professionalRegistrationNumber, doctor.professionalRegistrationNumber) && Objects.equals(medicalLicenseNumber, doctor.medicalLicenseNumber) && Objects.equals(expirationOfLicense, doctor.expirationOfLicense) && Objects.equals(emergencyContact, doctor.emergencyContact);
+  }
+
 
 }

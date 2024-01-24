@@ -3,11 +3,12 @@ package com.ivanovvasil.CapstoneB.prescription.payloads;
 import com.ivanovvasil.CapstoneB.doctor.payloads.DoctorDTO;
 import com.ivanovvasil.CapstoneB.patient.payloads.PatientResponseDTO;
 import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionStatus;
+import com.ivanovvasil.CapstoneB.prescription.enums.PrescriptionVerificationStatus;
 import com.ivanovvasil.CapstoneB.prescription.enums.PriorityPrescription;
 import com.ivanovvasil.CapstoneB.prescription.enums.TypeRecipe;
 import lombok.Builder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,12 +19,13 @@ public record PrescriptionDTO(
         DoctorDTO doctor,
         Set<PrescriptionDetailsDTO> prescription,
         int packagesNumber,
-        LocalDate isssuingDate,
+        LocalDateTime issuingDate,
         String region,
         String provinceAbbr,
         String localHealthCode,
         String diagnosticQuestion,
         TypeRecipe typeRecipe,
         PriorityPrescription priorityPrescription,
-        PrescriptionStatus status) {
+        PrescriptionStatus status,
+        PrescriptionVerificationStatus verificationStatus) {
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.ivanovvasil.CapstoneB.tools.Tools.calculateFiscalCode;
@@ -89,4 +90,14 @@ public class User implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) return true;
+    if (object == null || getClass() != object.getClass()) return false;
+    User user = (User) object;
+    return Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(birthDate, user.birthDate) && Objects.equals(sex, user.sex) && Objects.equals(fiscalCode, user.fiscalCode) && Objects.equals(address, user.address) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(municipality, user.municipality) && role == user.role && Objects.equals(id, user.id);
+  }
+
+
 }
