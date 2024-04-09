@@ -59,6 +59,7 @@ public class MedicinesService {
 
   private Medicine createMedicine(String[] line) {
     try {
+
       Medicine medicine = new Medicine();
       medicine.setActiveIngredient(line[0]);
       medicine.setGroupDescription(line[1]);
